@@ -1,7 +1,7 @@
 package com.victor.financeapp.file.storage.entry.controller;
 
 import com.victor.financeapp.file.storage.application.upload.UploadApplication;
-import com.victor.financeapp.file.storage.application.upload.response.UploadResponse;
+import com.victor.financeapp.file.storage.entry.response.UploadResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
