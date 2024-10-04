@@ -1,20 +1,36 @@
 package com.victor.financeapp.file.storage.entry.controller;
 
 import com.victor.financeapp.file.storage.application.upload.UploadApplication;
-import com.victor.financeapp.file.storage.entry.request.UploadRequest;
-import jakarta.validation.Valid;
+import com.victor.financeapp.file.storage.application.upload.response.UploadResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.codec.multipart.Part;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
-@RestController("/v1/chunks")
+import java.util.UUID;
+
+@Slf4j
+@RestController
+@RequestMapping("/v1/chunks")
 @RequiredArgsConstructor
 public class UploadController {
     private final UploadApplication uploadApplication;
 
-    @PostMapping
-    public Boolean uploadChunk(@RequestBody @Valid UploadRequest request) throws NoSuchFieldException, IllegalAccessException {
-        return uploadApplication.uploadFile(uploadApplication.map(request));
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Mono<ResponseEntity<UploadResponse>> uploadChunk(@RequestPart String partNumber,
+                                                            @RequestPart Part file) {
+        var uploadId = UUID.randomUUID().toString(); // Generate a unique upload ID for each file upload request
+        log.info("Received chunk {} for upload {} and file {}", partNumber, uploadId, file.name());
+        return uploadApplication.uploadFile(Integer.parseInt(partNumber), file)
+                .map(success -> ResponseEntity.ok(UploadResponse.builder()
+                        .uploadId(uploadId)
+                        .success(success)
+                        .build()));
     }
 }

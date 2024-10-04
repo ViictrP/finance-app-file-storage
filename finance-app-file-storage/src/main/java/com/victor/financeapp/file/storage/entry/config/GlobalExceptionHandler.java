@@ -30,6 +30,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleException(Exception e) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("error", e.getMessage());
-        return ResponseEntity.badRequest().body(errorMap);
+        return ResponseEntity.internalServerError().body(errorMap);
     }
 }

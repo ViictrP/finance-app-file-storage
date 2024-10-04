@@ -38,6 +38,11 @@ data:
   init-mongo.js: |
     db = db.getSiblingDB('file_storage');
     db.createCollection('files');
+    db.createUser({
+        user: 'file',
+        pwd: 'storage',
+        roles: [ { role: "readWrite", db: "file_storage" } ]
+    });
 
 ---
 apiVersion: v1

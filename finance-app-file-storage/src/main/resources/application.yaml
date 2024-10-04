@@ -4,7 +4,17 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb://file:storage@localhost:27017/file_storage
+      host: localhost
+      port: 27017
+      username: file
+      password: storage
+      database: file_storage
+
+  web:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+      max-request-size: 10MB
 
 logging:
   level:
