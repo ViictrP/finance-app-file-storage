@@ -1,0 +1,11 @@
+server:
+  port: 8081
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://file:storage@localhost:27017/file_storage
+
+logging:
+  level:
+    root: INFO

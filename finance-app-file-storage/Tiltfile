@@ -1,0 +1,9 @@
+# Load the Kubernetes resources defined in the YAML file
+k8s_yaml('./devops/mongo/mongo.deployment.yaml')
+
+# Optionally, set up the local development environment
+# Use `k8s_resource` to specify how to apply changes (optional)
+k8s_resource('mongodb', port_forwards=27017)
+
+# Optionally, you can define a Docker build context for a custom MongoDB image
+# docker_build('my-mongo-image', './path/to/Dockerfile')
