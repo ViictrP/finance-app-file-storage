@@ -7,6 +7,7 @@ public record UploadResponse(
         String id,
         String status,
         String userId,
-        String uploadId
+        String uploadId,
+        Integer totalParts
 ) {
 }

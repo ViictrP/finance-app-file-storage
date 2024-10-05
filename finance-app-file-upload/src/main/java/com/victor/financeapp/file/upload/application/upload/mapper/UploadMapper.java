@@ -15,6 +15,7 @@ public final class UploadMapper {
                     .userId(upload.userId())
                     .uploadId(upload.uploadId())
                     .status(upload.status().name())
+                    .totalParts(upload.totalParts())
                     .build();
         }
         return null;

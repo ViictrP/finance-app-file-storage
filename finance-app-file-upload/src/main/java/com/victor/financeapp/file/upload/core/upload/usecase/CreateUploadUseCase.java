@@ -14,7 +14,7 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CreateUploadUseCase implements UseCase<Upload, Upload> {
+public class CreateUploadUseCase implements UseCase<Upload> {
 
     private final UploadRepository uploadRepository;
 
@@ -29,9 +29,10 @@ public class CreateUploadUseCase implements UseCase<Upload, Upload> {
                 .userId(payload.userId())
                 .uploadId(UUID.randomUUID().toString())
                 .status(Status.CREATED)
+                .totalParts(payload.totalParts())
                 .build();
 
         log.info("Creating upload {}", upload.uploadId());
-        return uploadRepository.create(upload);
+        return uploadRepository.save(upload);
     }
 }

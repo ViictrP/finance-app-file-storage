@@ -18,6 +18,8 @@ public class UploadEntity {
     private String status;
     private String userId;
     private String uploadId;
+    private Integer totalParts;
+    private Integer currentPart;
 
     public static UploadEntity fromUpload(Upload upload) {
         return UploadEntity.builder()
@@ -25,6 +27,8 @@ public class UploadEntity {
                 .status(upload.status().name())
                 .userId(upload.userId())
                 .uploadId(upload.uploadId())
+                .totalParts(upload.totalParts())
+                .currentPart(upload.currentPart())
                 .build();
     }
 }

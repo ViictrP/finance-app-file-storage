@@ -17,4 +17,7 @@ public class UploadRequest {
 
     @NotBlank
     private String userId;
+
+    @NotNull
+    private Integer totalParts;
 }

@@ -2,7 +2,7 @@ package com.victor.financeapp.file.upload.core.upload.usecase;
 
 import reactor.core.publisher.Mono;
 
-public interface UseCase<P,R> {
+public interface UseCase<T> {
 
-    Mono<R> execute(P payload);
+    Mono<T> execute(T payload);
 }

@@ -8,6 +8,8 @@ public record Upload(
         String id,
         Status status,
         String userId,
-        String uploadId
+        String uploadId,
+        Integer totalParts,
+        Integer currentPart
 ) {
 }
