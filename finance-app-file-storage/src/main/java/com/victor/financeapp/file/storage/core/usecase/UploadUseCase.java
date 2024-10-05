@@ -23,12 +23,14 @@ public class UploadUseCase implements UseCase<Chunk, Boolean> {
 
     private final ChunkRepository chunkRepository;
 
+    //TODO salvar tamanho dos chunks, tamanho total do arquivo, mime type, caminho do arquivo, etc.
+    //TODO retornar o caminho do arquivo, file name e demais dados que foram salvos no banco de dados.
     @Override
     public Mono<Boolean> execute(Chunk chunk) {
         return Mono.fromCallable(() -> {
-                    var directory = Paths.get("./" + chunk.uploadId());
+                    var directory = Paths.get("./" + chunk.userId() + "/" + chunk.uploadId());
                     Files.createDirectories(directory);
-                    return directory.resolve(chunk.file().name());
+                    return directory.resolve("chunk_" + chunk.partNumber() + ".part");
                 })
                 .subscribeOn(Schedulers.boundedElastic())
                 .flatMap(path -> writeToFile(chunk, path))

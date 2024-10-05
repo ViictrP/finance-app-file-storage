@@ -19,5 +19,6 @@ public class ChunkEntity {
     private Integer partNumber;
     private Boolean success;
     private String userId;
+    private String fileName;
     private LocalDateTime createdAt;
 }

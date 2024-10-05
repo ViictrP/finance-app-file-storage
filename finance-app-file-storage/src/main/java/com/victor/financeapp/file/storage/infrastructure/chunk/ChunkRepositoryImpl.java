@@ -24,6 +24,7 @@ public class ChunkRepositoryImpl implements ChunkRepository {
                 .uploadId(chunk.uploadId())
                 .partNumber(chunk.partNumber())
                 .userId(chunk.userId())
+                .fileName(chunk.file().name())
                 .build();
         return chunkMongoRepository.save(newChunk)
                 .then(Mono.just(success));

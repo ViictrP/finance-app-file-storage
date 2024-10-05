@@ -46,6 +46,7 @@ public class CreateUploadChunk implements UseCase<UploadChunk> {
                 });
     }
 
+    //TODO retornar o caminho do arquivo e nome do chunk.
     private Mono<UploadResponse> sendTheUploadAndUpdateStatus(UploadChunk chunk, Upload upload) {
         log.info("Sending chunk {} for upload {}", chunk.partNumber(), chunk.uploadId());
         return uploadClient.send(chunk)
@@ -61,6 +62,7 @@ public class CreateUploadChunk implements UseCase<UploadChunk> {
                 .onErrorStop();
     }
 
+    //TODO salvar o file name, tamanho total do arquivo, MIME type, caminho do arquivo etc.
     private Mono<Upload> updateTheUploadStatus(UploadChunk payload, Upload upload) {
         log.info("Successfully uploaded chunk {} for upload {}", payload.partNumber(), payload.uploadId());
 
