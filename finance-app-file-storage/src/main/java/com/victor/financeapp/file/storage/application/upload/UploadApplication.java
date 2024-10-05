@@ -7,17 +7,10 @@ import org.springframework.http.codec.multipart.Part;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 public class UploadApplication {
     private final UploadUseCase uploadUseCase;
-
-    public Mono<Boolean> uploadFile(String userId, Integer partNumber, Part file) {
-        var uploadId = UUID.randomUUID().toString();
-        return this.uploadFilePart(userId, uploadId, partNumber, file);
-    }
 
     public Mono<Boolean> uploadFilePart(String userId, String uploadId, Integer partNumber, Part file) {
         return uploadUseCase.execute(Chunk.builder()

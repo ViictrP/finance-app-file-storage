@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mongodb-deployment
-  namespace: db
+  name: mongodb-storage-deployment
+  namespace: storage-db
   labels:
-    app: mongodb
+    app: mongodb-storage
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mongodb
+      app: mongodb-storage
   template:
     metadata:
       labels:
-        app: mongodb
+        app: mongodb-storage
     spec:
       containers:
-        - name: mongodb
+        - name: mongodb-storage
           image: mongo:8.0.0
           ports:
             - containerPort: 27017
@@ -26,13 +26,13 @@ spec:
             - name: MONGO_INITDB_ROOT_PASSWORD
               value: "storage"
           volumeMounts:
-            - name: mongo-init-script
-              mountPath: /docker-entrypoint-initdb.d/init-mongo.js
-              subPath: init-mongo.js
+            - name: mongo-storage-init-script
+              mountPath: /docker-entrypoint-initdb.d/init-storage-mongo.js
+              subPath: init-storage-mongo.js
       volumes:
-        - name: mongo-init-script
+        - name: mongo-storage-init-script
           configMap:
-            name: mongo-init-script
+            name: mongo-storage-init-script
             items:
-              - key: init-mongo.js
-                path: init-mongo.js
+              - key: init-storage-mongo.js
+                path: init-storage-mongo.js

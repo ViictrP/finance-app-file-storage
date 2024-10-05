@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: mongo-init-script
-  namespace: db
+  name: mongo-storage-init-script
+  namespace: storage-db
 data:
-  init-mongo.js: |
+  init-storage-mongo.js: |
     db = db.getSiblingDB('file_storage');
     db.createCollection('files');
     db.createUser({

@@ -1,23 +1,23 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: storage-deployment
-  namespace: storage-api
+  name: upload-deployment
+  namespace: upload-api
   labels:
-    app: storage
+    app: upload
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: storage
+      app: upload
   template:
     metadata:
       labels:
-        app: storage
+        app: upload
     spec:
       containers:
-        - name: storage
-          image: local/storage-app
+        - name: upload
+          image: local/upload-app
           ports:
             - name: http
               containerPort: 8080
@@ -27,13 +27,13 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: 'prod,api-docs'
             - name: DATABASE_URL
-              value: 'mongo-storage-service.storage-db.svc.cluster.local'
+              value: 'mongo-upload-service.upload-db.svc.cluster.local'
             - name: DB_PORT
-              value: '27017'
+              value: '27018'
             - name: DB_USER
               value: 'file'
             - name: DB_PASSWORD
-              value: 'storage'
+              value: 'upload'
             - name: PORT
               value: '8080'
             - name: SPRING_KAFKA_BOOTSTRAP_SERVERS

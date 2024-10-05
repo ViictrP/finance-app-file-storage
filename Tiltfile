@@ -19,24 +19,12 @@ def cert_manager():
         ]
     )
 
-def mongodb():
-    k8s_yaml([
-        './finance-app-file-storage/devops/mongo/mongo.namespace.yaml',
-        './finance-app-file-storage/devops/mongo/mongo.configmap.yaml',
-        './finance-app-file-storage/devops/mongo/mongo.deployment.yaml',
-        './finance-app-file-storage/devops/mongo/mongo.service.yaml'
-    ])
-    k8s_resource(
-        'mongodb-deployment',
-        port_forwards=27017
-    )
-
 def zookeeper():
     # Specify the Kubernetes manifest for the deployment
     k8s_yaml([
-        './finance-app-file-storage/devops/kafka/redpanda/redpanda.namespace.yaml',
-        './finance-app-file-storage/devops/kafka/zookeeper/zookeeper.service.yaml',
-        './finance-app-file-storage/devops/kafka/zookeeper/zookeeper.deployment.yaml'
+        './devops/kafka/redpanda/redpanda.namespace.yaml',
+        './devops/kafka/zookeeper/zookeeper.service.yaml',
+        './devops/kafka/zookeeper/zookeeper.deployment.yaml'
     ])
     k8s_resource(
         'zookeeper-deployment',
@@ -45,8 +33,8 @@ def zookeeper():
 
 def kafka():
     k8s_yaml([
-        './finance-app-file-storage/devops/kafka/kafka.service.yaml',
-        './finance-app-file-storage/devops/kafka/kafka.deployment.yaml',
+        './devops/kafka/kafka.service.yaml',
+        './devops/kafka/kafka.deployment.yaml',
     ])
     k8s_resource(
         'kafka-deployment',
@@ -56,14 +44,26 @@ def kafka():
 
 def redpanda():
     k8s_yaml([
-        './finance-app-file-storage/devops/kafka/redpanda/redpanda.service.yaml',
-        './finance-app-file-storage/devops/kafka/redpanda/redpanda.deployment.yaml',
-        './finance-app-file-storage/devops/kafka/redpanda/redpanda.ingress.yaml',
+        './devops/kafka/redpanda/redpanda.service.yaml',
+        './devops/kafka/redpanda/redpanda.deployment.yaml',
+        './devops/kafka/redpanda/redpanda.ingress.yaml',
     ])
     k8s_resource(
         'redpanda-deployment',
         links=['redpanda.local.gd'],
         resource_deps=['kafka-deployment']
+    )
+
+def storage_mongodb():
+    k8s_yaml([
+        './finance-app-file-storage/devops/mongo/mongo.namespace.yaml',
+        './finance-app-file-storage/devops/mongo/mongo.configmap.yaml',
+        './finance-app-file-storage/devops/mongo/mongo.deployment.yaml',
+        './finance-app-file-storage/devops/mongo/mongo.service.yaml'
+    ])
+    k8s_resource(
+        'mongodb-storage-deployment',
+        port_forwards=27017
     )
 
 def storage():
@@ -81,10 +81,45 @@ def storage():
     ])
     k8s_resource(
         'storage-deployment',
-        links=['api.local.gd'],
+        links=['storage.local.gd'],
         resource_deps=[
-            'mongodb-deployment',
+            'mongodb-storage-deployment',
             'kafka-deployment',
+        ]
+    )
+
+def upload_mongodb():
+    k8s_yaml([
+        './finance-app-file-upload/devops/mongo/mongo.namespace.yaml',
+        './finance-app-file-upload/devops/mongo/mongo.configmap.yaml',
+        './finance-app-file-upload/devops/mongo/mongo.deployment.yaml',
+        './finance-app-file-upload/devops/mongo/mongo.service.yaml'
+    ])
+    k8s_resource(
+        'mongodb-upload-deployment',
+        port_forwards=27018
+    )
+
+def upload():
+    # Specify the Kubernetes manifest for the deployment
+    nerdctl_build(
+        'local/upload-app',
+        context='./',
+        dockerfile='./finance-app-file-upload/devops/application/Dockerfile',
+    )
+    k8s_yaml([
+        './finance-app-file-upload/devops/application/upload.namespace.yaml',
+        './finance-app-file-upload/devops/application/upload.deployment.yaml',
+        './finance-app-file-upload/devops/application/upload.service.yaml',
+        './finance-app-file-upload/devops/application/upload.ingress.yaml'
+    ])
+    k8s_resource(
+        'upload-deployment',
+        links=['upload.local.br'],
+        resource_deps=[
+            'mongodb-upload-deployment',
+            'kafka-deployment',
+            'storage-deployment',
         ]
     )
 
@@ -92,5 +127,7 @@ cert_manager()
 zookeeper()
 kafka()
 redpanda()
-mongodb()
+storage_mongodb()
 storage()
+upload_mongodb()
+upload()

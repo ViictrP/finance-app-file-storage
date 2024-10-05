@@ -2,11 +2,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mongo-storage-service
-  namespace: storage-db
+  namespace: upload-db
 spec:
   selector:
-    app: mongodb-storage
+    app: mongodb-upload
   ports:
     - protocol: TCP
-      port: 27017
-      targetPort: 27017
+      port: 27018
+      targetPort: 27018

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-upload-init-script
+  namespace: upload-db
+data:
+  init-upload-mongo.js: |
+    db = db.getSiblingDB('file_upload');
+    db.createCollection('uploads');
+    db.createUser({
+        user: 'file',
+        pwd: 'upload',
+        roles: [ { role: "readWrite", db: "file_upload" } ]
+    });

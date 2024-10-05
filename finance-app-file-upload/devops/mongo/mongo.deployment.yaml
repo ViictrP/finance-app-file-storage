@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-upload-deployment
+  namespace: upload-db
+  labels:
+    app: mongodb-upload
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb-upload
+  template:
+    metadata:
+      labels:
+        app: mongodb-upload
+    spec:
+      containers:
+        - name: mongodb-upload
+          image: mongo:8.0.0
+          ports:
+            - containerPort: 27018
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: "file"
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: "upload"
+          volumeMounts:
+            - name: mongo-upload-init-script
+              mountPath: /docker-entrypoint-initdb.d/init-upload-mongo.js
+              subPath: init-upload-mongo.js
+      volumes:
+        - name: mongo-upload-init-script
+          configMap:
+            name: mongo-upload-init-script
+            items:
+              - key: init-upload-mongo.js
+                path: init-upload-mongo.js
