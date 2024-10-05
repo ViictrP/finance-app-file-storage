@@ -8,6 +8,7 @@ public record Chunk(
         String id,
         String uploadId,
         Integer partNumber,
+        String userId,
         Part file
 ) {
 }

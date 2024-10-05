@@ -1,7 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mongodb
+  name: mongodb-deployment
+  namespace: db
+  labels:
+    app: mongodb
 spec:
   replicas: 1
   selector:
@@ -23,37 +26,13 @@ spec:
             - name: MONGO_INITDB_ROOT_PASSWORD
               value: "storage"
           volumeMounts:
-            - name: mongo-init
-              mountPath: /docker-entrypoint-initdb.d
+            - name: mongo-init-script
+              mountPath: /docker-entrypoint-initdb.d/init-mongo.js
+              subPath: init-mongo.js
       volumes:
-        - name: mongo-init
+        - name: mongo-init-script
           configMap:
             name: mongo-init-script
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: mongo-init-script
-data:
-  init-mongo.js: |
-    db = db.getSiblingDB('file_storage');
-    db.createCollection('files');
-    db.createUser({
-        user: 'file',
-        pwd: 'storage',
-        roles: [ { role: "readWrite", db: "file_storage" } ]
-    });
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mongo
-spec:
-  selector:
-    app: mongodb
-  ports:
-    - protocol: TCP
-      port: 27017
-      targetPort: 27017
-  type: ClusterIP
+            items:
+              - key: init-mongo.js
+                path: init-mongo.js

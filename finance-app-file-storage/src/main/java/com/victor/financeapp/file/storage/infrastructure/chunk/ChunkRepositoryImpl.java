@@ -23,6 +23,7 @@ public class ChunkRepositoryImpl implements ChunkRepository {
                 .createdAt(LocalDateTime.now())
                 .uploadId(chunk.uploadId())
                 .partNumber(chunk.partNumber())
+                .userId(chunk.userId())
                 .build();
         return chunkMongoRepository.save(newChunk)
                 .then(Mono.just(success));

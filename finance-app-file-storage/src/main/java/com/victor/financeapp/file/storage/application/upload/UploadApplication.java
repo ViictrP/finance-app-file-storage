@@ -14,12 +14,17 @@ import java.util.UUID;
 public class UploadApplication {
     private final UploadUseCase uploadUseCase;
 
-    public Mono<Boolean> uploadFile(Integer partNumber, Part file) {
-        var uploadId = UUID.randomUUID().toString(); // Generate a unique upload ID for each file upload request
+    public Mono<Boolean> uploadFile(String userId, Integer partNumber, Part file) {
+        var uploadId = UUID.randomUUID().toString();
+        return this.uploadFilePart(userId, uploadId, partNumber, file);
+    }
+
+    public Mono<Boolean> uploadFilePart(String userId, String uploadId, Integer partNumber, Part file) {
         return uploadUseCase.execute(Chunk.builder()
-                        .uploadId(uploadId)
-                        .partNumber(partNumber)
-                        .file(file)
-                        .build());
+                .uploadId(uploadId)
+                .partNumber(partNumber)
+                .file(file)
+                .userId(userId)
+                .build());
     }
 }

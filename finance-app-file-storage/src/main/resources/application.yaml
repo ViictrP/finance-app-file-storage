@@ -1,13 +1,13 @@
 server:
-  port: 8081
+  port: ${PORT}
 
 spring:
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      username: file
-      password: storage
+      host: ${DATABASE_URL}
+      port: ${DB_PORT}
+      username: ${DB_USER}
+      password: ${DB_PASSWORD}
       database: file_storage
 
   web:

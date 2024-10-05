@@ -1,0 +1,45 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: storage-deployment
+  namespace: api
+  labels:
+    app: storage
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: storage
+  template:
+    metadata:
+      labels:
+        app: storage
+    spec:
+      containers:
+        - name: storage
+          image: local/storage-app
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: JAVA_OPTS
+              value: '-Xmx512m -Xms256m'
+            - name: SPRING_PROFILES_ACTIVE
+              value: 'prod,api-docs'
+            - name: DATABASE_URL
+              value: 'mongo-service.db.svc.cluster.local'
+            - name: DB_PORT
+              value: '27017'
+            - name: DB_USER
+              value: 'file'
+            - name: DB_PASSWORD
+              value: 'storage'
+            - name: PORT
+              value: '8080'
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"

@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.Part;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -23,11 +24,25 @@ public class UploadController {
     private final UploadApplication uploadApplication;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Mono<ResponseEntity<UploadResponse>> uploadChunk(@RequestPart String partNumber,
+    public Mono<ResponseEntity<UploadResponse>> uploadChunk(@RequestPart String userId,
+                                                            @RequestPart String partNumber,
                                                             @RequestPart Part file) {
         var uploadId = UUID.randomUUID().toString(); // Generate a unique upload ID for each file upload request
         log.info("Received chunk {} for upload {} and file {}", partNumber, uploadId, file.name());
-        return uploadApplication.uploadFile(Integer.parseInt(partNumber), file)
+        return uploadApplication.uploadFile(userId, Integer.parseInt(partNumber), file)
+                .map(success -> ResponseEntity.ok(UploadResponse.builder()
+                        .uploadId(uploadId)
+                        .success(success)
+                        .build()));
+    }
+
+    @PostMapping("/{uploadId}")
+    public Mono<ResponseEntity<UploadResponse>> uploadPart(@PathVariable String uploadId,
+                                                  @RequestPart String userId,
+                                                  @RequestPart String partNumber,
+                                                  @RequestPart Part file) {
+        log.info("Received chunk {} for upload {} and file {}", partNumber, uploadId, file.name());
+        return uploadApplication.uploadFilePart(userId, uploadId, Integer.parseInt(partNumber), file)
                 .map(success -> ResponseEntity.ok(UploadResponse.builder()
                         .uploadId(uploadId)
                         .success(success)

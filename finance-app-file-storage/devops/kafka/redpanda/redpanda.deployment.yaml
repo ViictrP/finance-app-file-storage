@@ -1,0 +1,25 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: redpanda-deployment
+  namespace: queue
+  labels:
+    app: redpanda
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redpanda
+  template:
+    metadata:
+      labels:
+        app: redpanda
+    spec:
+      containers:
+        - name: redpanda
+          image: redpandadata/console:v2.5.2
+          ports:
+            - containerPort: 8080
+          env:
+            - name: KAFKA_BROKERS
+              value: "kafka-service.queue.svc.cluster.local:9092"

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-init-script
+  namespace: db
+data:
+  init-mongo.js: |
+    db = db.getSiblingDB('file_storage');
+    db.createCollection('files');
+    db.createUser({
+        user: 'file',
+        pwd: 'storage',
+        roles: [ { role: "readWrite", db: "file_storage" } ]
+    });
