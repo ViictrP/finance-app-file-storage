@@ -2,6 +2,9 @@ server:
   port: ${PORT}
 
 spring:
+  application:
+    name: File Storage Application
+    version: 0.0.1
   data:
     mongodb:
       host: ${DATABASE_URL}
@@ -16,6 +19,44 @@ spring:
       max-file-size: 5MB
       max-request-size: 10MB
 
+  kafka:
+    bootstrap-servers: localhost:29092
+    consumer:
+      group-id: ${spring.application.name}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
+      properties:
+        interceptor.classes: io.opentelemetry.instrumentation.kafkaclients.v2_6.TracingConsumerInterceptor
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.trusted.packages: 'com.victor.financeapp.file.storage.*' # Allow serialization of our domain objects
+        interceptor.classes: io.opentelemetry.instrumentation.kafkaclients.v2_6.TracingProducerInterceptor
+
+springwolf:
+  docket:
+    base-package: com.victor.financeapp.file.storage
+    info:
+      title: ${spring.application.name}
+      version: 0.0.1
+    servers:
+      kafka.protocol: kafka
+      kafka.host: localhost:9092
+
+kafka:
+  topic:
+    upload:
+      name: 'UploadCompletedReceived'
+      partitions: 1
+      replicas: 1
+
 logging:
   level:
     root: INFO
+    org.springframework.data.mongodb: WARN
+    org.springframework.web: INFO
+    org.springframework.kafka: WARN
+    org.apache.kafka: WARN
+    com.victor.financeapp.file.storage: INFO
