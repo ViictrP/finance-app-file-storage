@@ -21,10 +21,10 @@ def cert_manager():
 
 def mongodb():
     k8s_yaml([
-        './devops/mongo/mongo.namespace.yaml',
-        './devops/mongo/mongo.configmap.yaml',
-        './devops/mongo/mongo.deployment.yaml',
-        './devops/mongo/mongo.service.yaml'
+        './finance-app-file-storage/devops/mongo/mongo.namespace.yaml',
+        './finance-app-file-storage/devops/mongo/mongo.configmap.yaml',
+        './finance-app-file-storage/devops/mongo/mongo.deployment.yaml',
+        './finance-app-file-storage/devops/mongo/mongo.service.yaml'
     ])
     k8s_resource(
         'mongodb-deployment',
@@ -34,9 +34,9 @@ def mongodb():
 def zookeeper():
     # Specify the Kubernetes manifest for the deployment
     k8s_yaml([
-        './devops/kafka/redpanda/redpanda.namespace.yaml',
-        './devops/kafka/zookeeper/zookeeper.service.yaml',
-        './devops/kafka/zookeeper/zookeeper.deployment.yaml'
+        './finance-app-file-storage/devops/kafka/redpanda/redpanda.namespace.yaml',
+        './finance-app-file-storage/devops/kafka/zookeeper/zookeeper.service.yaml',
+        './finance-app-file-storage/devops/kafka/zookeeper/zookeeper.deployment.yaml'
     ])
     k8s_resource(
         'zookeeper-deployment',
@@ -45,8 +45,8 @@ def zookeeper():
 
 def kafka():
     k8s_yaml([
-        './devops/kafka/kafka.service.yaml',
-        './devops/kafka/kafka.deployment.yaml',
+        './finance-app-file-storage/devops/kafka/kafka.service.yaml',
+        './finance-app-file-storage/devops/kafka/kafka.deployment.yaml',
     ])
     k8s_resource(
         'kafka-deployment',
@@ -56,9 +56,9 @@ def kafka():
 
 def redpanda():
     k8s_yaml([
-        './devops/kafka/redpanda/redpanda.service.yaml',
-        './devops/kafka/redpanda/redpanda.deployment.yaml',
-        './devops/kafka/redpanda/redpanda.ingress.yaml',
+        './finance-app-file-storage/devops/kafka/redpanda/redpanda.service.yaml',
+        './finance-app-file-storage/devops/kafka/redpanda/redpanda.deployment.yaml',
+        './finance-app-file-storage/devops/kafka/redpanda/redpanda.ingress.yaml',
     ])
     k8s_resource(
         'redpanda-deployment',
@@ -66,18 +66,18 @@ def redpanda():
         resource_deps=['kafka-deployment']
     )
 
-def service():
+def storage():
     # Specify the Kubernetes manifest for the deployment
     nerdctl_build(
         'local/storage-app',
         context='./',
-        dockerfile='./devops/application/Dockerfile',
+        dockerfile='./finance-app-file-storage/devops/application/Dockerfile',
     )
     k8s_yaml([
-        './devops/application/storage.namespace.yaml',
-        './devops/application/storage.deployment.yaml',
-        './devops/application/storage.service.yaml',
-        './devops/application/storage.ingress.yaml'
+        './finance-app-file-storage/devops/application/storage.namespace.yaml',
+        './finance-app-file-storage/devops/application/storage.deployment.yaml',
+        './finance-app-file-storage/devops/application/storage.service.yaml',
+        './finance-app-file-storage/devops/application/storage.ingress.yaml'
     ])
     k8s_resource(
         'storage-deployment',
@@ -93,4 +93,4 @@ zookeeper()
 kafka()
 redpanda()
 mongodb()
-service()
+storage()
