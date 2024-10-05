@@ -78,6 +78,7 @@ public class CreateUploadChunk implements UseCase<UploadChunk> {
         return uploadRepository.save(updatedUpload);
     }
 
+    //TODO salvar o file name
     private Mono<UploadChunk> updateChunkStatus(UploadChunk payload, boolean success) {
         log.info("Updating the chunk {} status to {}", payload.partNumber(), success ? "completed" : "failed");
         var chunk = UploadChunk.builder()
