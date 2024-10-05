@@ -115,7 +115,7 @@ def upload():
     ])
     k8s_resource(
         'upload-deployment',
-        links=['upload.local.br'],
+        links=['upload.local.gd'],
         resource_deps=[
             'mongodb-upload-deployment',
             'kafka-deployment',
