@@ -8,7 +8,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
   rules:
-    - host: upload.local.br
+    - host: upload.local.gd
       http:
         paths:
           - path: /

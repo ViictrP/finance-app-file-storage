@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -18,15 +20,18 @@ public class CreateUploadUseCase implements UseCase<Upload, Upload> {
 
     @Override
     public Mono<Upload> execute(Upload payload) {
-        log.info("Validating payload {}", payload);
+        log.info("Validating payload from user {}", payload.userId());
         if (payload.userId() == null) {
             throw new MissingRequiredFieldException();
         }
-        log.info("Creating upload for user {}", payload.userId());
+
         var upload = Upload.builder()
                 .userId(payload.userId())
+                .uploadId(UUID.randomUUID().toString())
                 .status(Status.CREATED)
                 .build();
+
+        log.info("Creating upload {}", upload.uploadId());
         return uploadRepository.create(upload);
     }
 }

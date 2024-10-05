@@ -22,7 +22,6 @@ public class UploadApplication {
                         .userId(uploadDTO.userId())
                         .build())
                 .switchIfEmpty(Mono.error(new RuntimeException("Upload creation failed")))
-                .flatMap(upload -> Mono.just(UploadMapper.uploadtoDTO(upload)))
-                .doOnSuccess(upload -> log.info("Upload created successfully: {}", upload));
+                .flatMap(upload -> Mono.just(UploadMapper.uploadtoDTO(upload)));
     }
 }

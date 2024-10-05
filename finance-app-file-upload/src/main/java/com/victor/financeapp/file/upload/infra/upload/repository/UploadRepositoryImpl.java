@@ -20,12 +20,12 @@ public class UploadRepositoryImpl implements UploadRepository {
     public Mono<Upload> create(Upload upload) {
         log.info("Persisting upload {} for user {}", upload.uploadId(), upload.userId());
         return repository.save(UploadEntity.fromUpload(upload))
-                .map(entity -> Upload.builder()
+                .flatMap(entity -> Mono.just(Upload.builder()
                         .id(entity.getId())
                         .userId(entity.getUserId())
                         .uploadId(entity.getUploadId())
                         .status(Status.fromName(entity.getStatus()))
-                        .build())
+                        .build()))
                 .doOnSuccess(entity -> log.info("Upload created: {}", entity.id()));
     }
 }

@@ -4,6 +4,9 @@ import lombok.Builder;
 
 @Builder
 public record UploadDTO(
-        String userId
+        String id,
+        String userId,
+        String uploadId,
+        String status
 ) {
 }

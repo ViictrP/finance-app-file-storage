@@ -22,13 +22,17 @@ public class UploadController {
 
     private final UploadApplication application;
 
-    @PostMapping()
+    @PostMapping
     public Mono<ResponseEntity<UploadResponse>> createUpload(@RequestBody @Valid UploadRequest request) {
         log.info("Received upload request for user {}", request.getUserId());
-        return application.createUpload(UploadDTO.builder()
-                        .userId(request.getUserId())
-                        .build())
-                .flatMap(uploadDTO -> Mono.just(ResponseEntity.ok(UploadResponse.builder()
-                        .build())));
+        return application.createUpload(UploadDTO.builder().userId(request.getUserId()).build())
+                .flatMap(uploadDTO ->
+                    Mono.just(ResponseEntity.ok(UploadResponse.builder()
+                        .uploadId(uploadDTO.uploadId())
+                        .id(uploadDTO.id())
+                        .status(uploadDTO.status())
+                        .userId(uploadDTO.userId())
+                        .build()))
+                );
     }
 }
