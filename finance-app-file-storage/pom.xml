@@ -13,19 +13,6 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>finance-app-file-storage</name>
     <description>finance-app-file-storage</description>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
     <properties>
         <java.version>21</java.version>
     </properties>
