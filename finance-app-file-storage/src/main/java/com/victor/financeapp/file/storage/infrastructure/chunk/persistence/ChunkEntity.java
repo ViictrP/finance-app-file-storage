@@ -1,4 +1,4 @@
-package com.victor.financeapp.file.storage.infrastructure.chunk.entity;
+package com.victor.financeapp.file.storage.infrastructure.chunk.persistence;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-public class ChunkEntity {
+class ChunkEntity {
     @Id
     private String id;
     private String uploadId;

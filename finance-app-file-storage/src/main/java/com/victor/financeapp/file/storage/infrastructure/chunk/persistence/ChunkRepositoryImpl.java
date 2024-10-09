@@ -1,9 +1,7 @@
-package com.victor.financeapp.file.storage.infrastructure.chunk;
+package com.victor.financeapp.file.storage.infrastructure.chunk.persistence;
 
 import com.victor.financeapp.file.storage.core.model.Chunk;
 import com.victor.financeapp.file.storage.core.repository.ChunkRepository;
-import com.victor.financeapp.file.storage.infrastructure.chunk.entity.ChunkEntity;
-import com.victor.financeapp.file.storage.infrastructure.chunk.repository.ChunkMongoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
@@ -13,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Repository
 @RequiredArgsConstructor
-public class ChunkRepositoryImpl implements ChunkRepository {
+class ChunkRepositoryImpl implements ChunkRepository {
 
     private final ChunkMongoRepository chunkMongoRepository;
 
