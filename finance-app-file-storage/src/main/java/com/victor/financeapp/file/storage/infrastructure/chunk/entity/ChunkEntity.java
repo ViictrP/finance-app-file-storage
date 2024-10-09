@@ -20,5 +20,9 @@ public class ChunkEntity {
     private Boolean success;
     private String userId;
     private String fileName;
+    private String path;
+    private String mimeType;
+    private Long fileSize;
+    private Long totalFileSize;
     private LocalDateTime createdAt;
 }

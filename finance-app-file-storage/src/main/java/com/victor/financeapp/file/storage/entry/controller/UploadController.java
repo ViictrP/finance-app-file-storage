@@ -1,6 +1,7 @@
 package com.victor.financeapp.file.storage.entry.controller;
 
 import com.victor.financeapp.file.storage.application.upload.UploadApplication;
+import com.victor.financeapp.file.storage.application.upload.dto.ChunkDTO;
 import com.victor.financeapp.file.storage.entry.response.UploadResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,14 +23,24 @@ public class UploadController {
 
     @PostMapping
     public Mono<ResponseEntity<UploadResponse>> uploadPart(@RequestPart String uploadId,
-                                                  @RequestPart String userId,
-                                                  @RequestPart String partNumber,
-                                                  @RequestPart Part file) {
+                                                           @RequestPart String userId,
+                                                           @RequestPart String partNumber,
+                                                           @RequestPart String fileName,
+                                                           @RequestPart String fileExtension,
+                                                           @RequestPart Part file) {
         log.info("Received chunk {} for upload {} and file {}", partNumber, uploadId, file.name());
-        return uploadApplication.uploadFilePart(userId, uploadId, Integer.parseInt(partNumber), file)
-                .map(success -> ResponseEntity.ok(UploadResponse.builder()
+        return uploadApplication.uploadFilePart(ChunkDTO.builder()
+                        .partNumber(Integer.valueOf(partNumber))
+                        .userId(userId)
                         .uploadId(uploadId)
-                        .success(success)
+                        .fileName(fileName + "." + fileExtension)
+                        .mimeType(fileExtension)
+                        .build())
+                .map(savedChunkDTO -> ResponseEntity.ok(UploadResponse.builder()
+                        .uploadId(uploadId)
+                        .success(true)
+                        .fileId(savedChunkDTO.id())
+                        .filePath(savedChunkDTO.path())
                         .build()));
     }
 }

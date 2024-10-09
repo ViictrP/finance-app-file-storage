@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CreateUploadChunk implements UseCase<UploadChunk> {
+public class CreateUploadChunkUseCase implements UseCase<UploadChunk> {
 
     private final UploadClient uploadClient;
     private final UploadRepository uploadRepository;

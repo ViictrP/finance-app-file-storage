@@ -6,7 +6,7 @@ import com.victor.financeapp.file.upload.application.upload.mapper.UploadChunkMa
 import com.victor.financeapp.file.upload.application.upload.mapper.UploadMapper;
 import com.victor.financeapp.file.upload.core.upload.entity.Upload;
 import com.victor.financeapp.file.upload.core.upload.entity.UploadChunk;
-import com.victor.financeapp.file.upload.core.upload.usecase.CreateUploadChunk;
+import com.victor.financeapp.file.upload.core.upload.usecase.CreateUploadChunkUseCase;
 import com.victor.financeapp.file.upload.core.upload.usecase.CreateUploadUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono;
 public class UploadApplication {
 
     private final CreateUploadUseCase createUploadUseCase;
-    private final CreateUploadChunk createUploadChunk;
+    private final CreateUploadChunkUseCase createUploadChunkUseCase;
 
     public Mono<UploadDTO> createUpload(UploadDTO uploadDTO) {
         log.info("Creating upload for user {}", uploadDTO.userId());
@@ -33,7 +33,7 @@ public class UploadApplication {
 
     public Mono<UploadChunkDTO> createUploadChunk(UploadChunkDTO uploadChunkDTO) {
         log.info("Processing upload chunk for user {}, upload {}, part {}", uploadChunkDTO.userId(), uploadChunkDTO.uploadId(), uploadChunkDTO.partNumber());
-        return createUploadChunk.execute(UploadChunk.builder()
+        return createUploadChunkUseCase.execute(UploadChunk.builder()
                         .uploadId(uploadChunkDTO.uploadId())
                         .partNumber(uploadChunkDTO.partNumber())
                         .userId(uploadChunkDTO.userId())
