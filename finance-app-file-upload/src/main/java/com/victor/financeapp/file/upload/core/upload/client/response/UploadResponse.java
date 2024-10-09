@@ -9,7 +9,10 @@ import lombok.Setter;
 @Setter
 public class UploadResponse {
     private String uploadId;
+    private String fileId;
+    private String filePath;
     private Boolean success;
+    private Integer currentPart;
 
     public boolean wasSuccessful() {
         return success != null && success;

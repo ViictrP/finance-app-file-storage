@@ -1,7 +1,7 @@
 package com.victor.financeapp.file.upload.core.upload.usecase;
 
-import com.victor.financeapp.file.upload.core.upload.entity.Upload;
-import com.victor.financeapp.file.upload.core.upload.entity.enums.Status;
+import com.victor.financeapp.file.upload.core.upload.model.Upload;
+import com.victor.financeapp.file.upload.core.upload.model.enums.Status;
 import com.victor.financeapp.file.upload.core.upload.exception.MissingRequiredFieldException;
 import com.victor.financeapp.file.upload.core.upload.repository.UploadRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +30,9 @@ public class CreateUploadUseCase implements UseCase<Upload> {
                 .uploadId(UUID.randomUUID().toString())
                 .status(Status.CREATED)
                 .totalParts(payload.totalParts())
+                .fileName(payload.fileName())
+                .fileSize(payload.fileSize())
+                .fileExtension(payload.fileExtension())
                 .build();
 
         log.info("Creating upload {}", upload.uploadId());

@@ -1,4 +1,4 @@
-package com.victor.financeapp.file.upload.core.upload.entity.enums;
+package com.victor.financeapp.file.upload.core.upload.model.enums;
 
 public enum Status {
     CREATED,

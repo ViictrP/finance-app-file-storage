@@ -1,8 +1,8 @@
 package com.victor.financeapp.file.upload.infra.upload.repository;
 
-import com.victor.financeapp.file.upload.core.upload.entity.Upload;
-import com.victor.financeapp.file.upload.core.upload.entity.UploadChunk;
-import com.victor.financeapp.file.upload.core.upload.entity.enums.Status;
+import com.victor.financeapp.file.upload.core.upload.model.Upload;
+import com.victor.financeapp.file.upload.core.upload.model.UploadChunk;
+import com.victor.financeapp.file.upload.core.upload.model.enums.Status;
 import com.victor.financeapp.file.upload.core.upload.repository.UploadRepository;
 import com.victor.financeapp.file.upload.infra.upload.entity.UploadChunkEntity;
 import com.victor.financeapp.file.upload.infra.upload.entity.UploadEntity;
@@ -26,6 +26,10 @@ public class UploadRepositoryImpl implements UploadRepository {
                         .id(entity.getId())
                         .userId(entity.getUserId())
                         .uploadId(entity.getUploadId())
+                        .fileName(entity.getFileName())
+                        .fileExtension(entity.getFileExtension())
+                        .fileSize(entity.getFileSize())
+                        .filePath(entity.getFilePath())
                         .status(Status.fromName(entity.getStatus()))
                         .totalParts(entity.getTotalParts())
                         .build()));
@@ -39,6 +43,7 @@ public class UploadRepositoryImpl implements UploadRepository {
                         .partNumber(entity.getPartNumber())
                         .userId(entity.getUserId())
                         .uploadId(entity.getUploadId())
+                        .chunkPath(chunk.chunkPath())
                         .id(entity.getId())
                         .build())
                 )
@@ -53,6 +58,10 @@ public class UploadRepositoryImpl implements UploadRepository {
                         .userId(entity.getUserId())
                         .uploadId(entity.getUploadId())
                         .status(Status.fromName(entity.getStatus()))
+                        .filePath(entity.getFilePath())
+                        .fileName(entity.getFileName())
+                        .fileExtension(entity.getFileExtension())
+                        .fileSize(entity.getFileSize())
                         .totalParts(entity.getTotalParts())
                         .currentPart(entity.getCurrentPart())
                         .build()));

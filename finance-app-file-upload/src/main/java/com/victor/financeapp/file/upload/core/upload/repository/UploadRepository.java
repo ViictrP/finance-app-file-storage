@@ -1,7 +1,7 @@
 package com.victor.financeapp.file.upload.core.upload.repository;
 
-import com.victor.financeapp.file.upload.core.upload.entity.Upload;
-import com.victor.financeapp.file.upload.core.upload.entity.UploadChunk;
+import com.victor.financeapp.file.upload.core.upload.model.Upload;
+import com.victor.financeapp.file.upload.core.upload.model.UploadChunk;
 import reactor.core.publisher.Mono;
 
 public interface UploadRepository {

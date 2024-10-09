@@ -27,6 +27,7 @@ public class UploadController {
                                                            @RequestPart String partNumber,
                                                            @RequestPart String fileName,
                                                            @RequestPart String fileExtension,
+                                                           @RequestPart String fileSize,
                                                            @RequestPart Part file) {
         log.info("Received chunk {} for upload {} and file {}", partNumber, uploadId, file.name());
         return uploadApplication.uploadFilePart(ChunkDTO.builder()
@@ -34,6 +35,7 @@ public class UploadController {
                         .userId(userId)
                         .uploadId(uploadId)
                         .fileName(fileName + "." + fileExtension)
+                        .totalFileSize(Long.valueOf(fileSize))
                         .mimeType(fileExtension)
                         .build())
                 .map(savedChunkDTO -> ResponseEntity.ok(UploadResponse.builder()
@@ -41,6 +43,7 @@ public class UploadController {
                         .success(true)
                         .fileId(savedChunkDTO.id())
                         .filePath(savedChunkDTO.path())
+                        .currentPart(Integer.valueOf(partNumber))
                         .build()));
     }
 }

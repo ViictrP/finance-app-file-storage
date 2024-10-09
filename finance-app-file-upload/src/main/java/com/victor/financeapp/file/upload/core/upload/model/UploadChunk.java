@@ -1,7 +1,7 @@
-package com.victor.financeapp.file.upload.core.upload.entity;
+package com.victor.financeapp.file.upload.core.upload.model;
 
-import com.victor.financeapp.file.upload.core.upload.entity.enums.Status;
 import com.victor.financeapp.file.upload.core.upload.exception.MissingRequiredFieldException;
+import com.victor.financeapp.file.upload.core.upload.model.enums.Status;
 import lombok.Builder;
 import org.springframework.http.codec.multipart.Part;
 
@@ -12,6 +12,7 @@ public record UploadChunk(
         String userId,
         String uploadId,
         Status status,
+        String chunkPath,
         Part file
 ) {
 

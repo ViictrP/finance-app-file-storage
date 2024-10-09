@@ -1,7 +1,7 @@
 package com.victor.financeapp.file.upload.application.upload.mapper;
 
 import com.victor.financeapp.file.upload.application.upload.dto.UploadDTO;
-import com.victor.financeapp.file.upload.core.upload.entity.Upload;
+import com.victor.financeapp.file.upload.core.upload.model.Upload;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

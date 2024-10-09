@@ -32,6 +32,9 @@ public class UploadController {
         return application.createUpload(UploadDTO.builder()
                 .userId(request.getUserId())
                 .totalParts(request.getTotalParts())
+                .fileName(request.getFileName())
+                .fileExtension(request.getFileExtension())
+                .fileSize(request.getFileSize())
                 .build()
         ).flatMap(uploadDTO ->
                 Mono.just(ResponseEntity.ok(UploadResponse.builder()
@@ -48,6 +51,7 @@ public class UploadController {
     public Mono<ResponseEntity<UploadResponse>> createUploadChunk(@PathVariable String uploadId,
                                                                   @RequestPart String partNumber,
                                                                   @RequestPart String userId,
+
                                                                   @RequestPart Part file) {
         log.info("Received upload chunk request for user {}, part {}", userId, partNumber);
         return application.createUploadChunk(UploadChunkDTO.builder()

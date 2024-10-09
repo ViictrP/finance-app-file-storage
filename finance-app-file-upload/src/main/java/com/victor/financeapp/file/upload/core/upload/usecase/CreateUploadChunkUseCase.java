@@ -1,12 +1,13 @@
 package com.victor.financeapp.file.upload.core.upload.usecase;
 
 import com.victor.financeapp.file.upload.core.upload.client.UploadClient;
+import com.victor.financeapp.file.upload.core.upload.client.dto.UploadChunkClientDTO;
 import com.victor.financeapp.file.upload.core.upload.client.response.UploadResponse;
-import com.victor.financeapp.file.upload.core.upload.entity.Upload;
-import com.victor.financeapp.file.upload.core.upload.entity.UploadChunk;
-import com.victor.financeapp.file.upload.core.upload.entity.enums.Status;
 import com.victor.financeapp.file.upload.core.upload.exception.UploadFailedException;
 import com.victor.financeapp.file.upload.core.upload.exception.UploadNotFoundException;
+import com.victor.financeapp.file.upload.core.upload.model.Upload;
+import com.victor.financeapp.file.upload.core.upload.model.UploadChunk;
+import com.victor.financeapp.file.upload.core.upload.model.enums.Status;
 import com.victor.financeapp.file.upload.core.upload.repository.UploadRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,18 +42,25 @@ public class CreateUploadChunkUseCase implements UseCase<UploadChunk> {
                                             .build()
                             )
                             .flatMap(chunk -> sendTheUploadAndUpdateStatus(chunk, upload)
-                                    .flatMap(response -> updateChunkStatus(chunk, response.wasSuccessful()))
+                                    .flatMap(response -> updateChunkStatus(chunk, response))
                             );
                 });
     }
 
-    //TODO retornar o caminho do arquivo e nome do chunk.
     private Mono<UploadResponse> sendTheUploadAndUpdateStatus(UploadChunk chunk, Upload upload) {
         log.info("Sending chunk {} for upload {}", chunk.partNumber(), chunk.uploadId());
-        return uploadClient.send(chunk)
+        return uploadClient.send(new UploadChunkClientDTO(
+                        chunk.uploadId(),
+                        chunk.userId(),
+                        chunk.partNumber(),
+                        upload.fileName(),
+                        upload.fileExtension(),
+                        upload.fileSize(),
+                        chunk.file()
+                ))
                 .flatMap(response -> {
                     if (response.wasSuccessful()) {
-                        return updateTheUploadStatus(chunk, upload)
+                        return updateTheUploadStatus(upload, response)
                                 .then(Mono.just(response));
                     } else {
                         return Mono.error(new UploadFailedException());
@@ -62,33 +70,36 @@ public class CreateUploadChunkUseCase implements UseCase<UploadChunk> {
                 .onErrorStop();
     }
 
-    //TODO salvar o file name, tamanho total do arquivo, MIME type, caminho do arquivo etc.
-    private Mono<Upload> updateTheUploadStatus(UploadChunk payload, Upload upload) {
-        log.info("Successfully uploaded chunk {} for upload {}", payload.partNumber(), payload.uploadId());
+    private Mono<Upload> updateTheUploadStatus(Upload upload, UploadResponse uploadResponse) {
+        log.info("Successfully uploaded chunk {} for upload {}", upload.currentPart(), upload.uploadId());
 
         var updatedUpload = Upload.builder()
                 .id(upload.id())
+                .status(upload.totalParts().equals(uploadResponse.getCurrentPart()) ? Status.COMPLETED : Status.IN_PROGRESS)
+                .filePath(uploadResponse.getFilePath().replace("file_chunk_" + uploadResponse.getCurrentPart() + ".part", upload.fileName()))
+                .currentPart(uploadResponse.getCurrentPart())
                 .userId(upload.userId())
                 .uploadId(upload.uploadId())
-                .status(upload.totalParts().equals(payload.partNumber()) ? Status.COMPLETED : Status.IN_PROGRESS)
+                .fileName(upload.fileName())
+                .fileExtension(upload.fileExtension())
+                .fileSize(upload.fileSize())
                 .totalParts(upload.totalParts())
-                .currentPart(payload.partNumber())
                 .build();
 
-        log.info("Updating the payload {} progress ", payload.uploadId());
+        log.info("Updating the payload {} progress ", upload.uploadId());
         //TODO send upload completed event after saving.
         return uploadRepository.save(updatedUpload);
     }
 
-    //TODO salvar o file name
-    private Mono<UploadChunk> updateChunkStatus(UploadChunk payload, boolean success) {
-        log.info("Updating the chunk {} status to {}", payload.partNumber(), success ? "completed" : "failed");
+    private Mono<UploadChunk> updateChunkStatus(UploadChunk payload, UploadResponse response) {
+        log.info("Updating the chunk {} status to {}", payload.partNumber(), response.wasSuccessful() ? "completed" : "failed");
         var chunk = UploadChunk.builder()
                 .partNumber(payload.partNumber())
+                .chunkPath(response.getFilePath())
                 .uploadId(payload.uploadId())
                 .id(payload.id())
                 .userId(payload.userId())
-                .status(success ? Status.COMPLETED : Status.FAILED)
+                .status(response.wasSuccessful() ? Status.COMPLETED : Status.FAILED)
                 .build();
 
         return uploadRepository.saveChunk(chunk);

@@ -4,8 +4,8 @@ import com.victor.financeapp.file.upload.application.upload.dto.UploadChunkDTO;
 import com.victor.financeapp.file.upload.application.upload.dto.UploadDTO;
 import com.victor.financeapp.file.upload.application.upload.mapper.UploadChunkMapper;
 import com.victor.financeapp.file.upload.application.upload.mapper.UploadMapper;
-import com.victor.financeapp.file.upload.core.upload.entity.Upload;
-import com.victor.financeapp.file.upload.core.upload.entity.UploadChunk;
+import com.victor.financeapp.file.upload.core.upload.model.Upload;
+import com.victor.financeapp.file.upload.core.upload.model.UploadChunk;
 import com.victor.financeapp.file.upload.core.upload.usecase.CreateUploadChunkUseCase;
 import com.victor.financeapp.file.upload.core.upload.usecase.CreateUploadUseCase;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +26,9 @@ public class UploadApplication {
         return createUploadUseCase.execute(Upload.builder()
                         .userId(uploadDTO.userId())
                         .totalParts(uploadDTO.totalParts())
+                        .fileName(uploadDTO.fileName())
+                        .fileExtension(uploadDTO.fileExtension())
+                        .fileSize(Long.valueOf(uploadDTO.fileSize()))
                         .build())
                 .switchIfEmpty(Mono.error(new RuntimeException("Upload creation failed")))
                 .flatMap(upload -> Mono.just(UploadMapper.uploadtoDTO(upload)));

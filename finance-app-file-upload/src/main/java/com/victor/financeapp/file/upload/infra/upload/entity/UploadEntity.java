@@ -1,6 +1,6 @@
 package com.victor.financeapp.file.upload.infra.upload.entity;
 
-import com.victor.financeapp.file.upload.core.upload.entity.Upload;
+import com.victor.financeapp.file.upload.core.upload.model.Upload;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,8 +18,12 @@ public class UploadEntity {
     private String status;
     private String userId;
     private String uploadId;
+    private String fileName;
+    private String fileExtension;
+    private Long fileSize;
     private Integer totalParts;
     private Integer currentPart;
+    private String filePath;
 
     public static UploadEntity fromUpload(Upload upload) {
         return UploadEntity.builder()
@@ -27,8 +31,12 @@ public class UploadEntity {
                 .status(upload.status().name())
                 .userId(upload.userId())
                 .uploadId(upload.uploadId())
+                .fileName(upload.fileName())
+                .fileExtension(upload.fileExtension())
+                .fileSize(upload.fileSize())
                 .totalParts(upload.totalParts())
                 .currentPart(upload.currentPart())
+                .filePath(upload.filePath())
                 .build();
     }
 }

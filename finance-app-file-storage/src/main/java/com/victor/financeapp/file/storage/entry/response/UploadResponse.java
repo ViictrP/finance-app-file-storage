@@ -7,6 +7,7 @@ public record UploadResponse(
         String uploadId,
         String fileId,
         String filePath,
+        Integer currentPart,
         Boolean success
 ) {
 }

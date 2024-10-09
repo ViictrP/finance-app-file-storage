@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.bind.annotation.RequestPart;
 
 @Builder
 @Getter
@@ -20,4 +21,13 @@ public class UploadRequest {
 
     @NotNull
     private Integer totalParts;
+
+    @NotBlank
+    private String fileName;
+
+    @NotBlank
+    private String fileExtension;
+
+    @NotBlank
+    private String fileSize;
 }
