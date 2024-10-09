@@ -1,4 +1,4 @@
-package com.victor.financeapp.file.upload.infra.upload.entity;
+package com.victor.financeapp.file.upload.infra.upload.persistence;
 
 import com.victor.financeapp.file.upload.core.upload.model.Upload;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 @Getter
 @Setter
-public class UploadEntity {
+class UploadEntity {
 
     @Id
     private String id;

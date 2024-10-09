@@ -1,14 +1,13 @@
-package com.victor.financeapp.file.upload.infra.upload.client.upload;
+package com.victor.financeapp.file.upload.infra.upload.client;
 
 import com.victor.financeapp.file.upload.core.upload.client.UploadClient;
 import com.victor.financeapp.file.upload.core.upload.client.dto.UploadChunkClientDTO;
 import com.victor.financeapp.file.upload.core.upload.client.response.UploadResponse;
-import com.victor.financeapp.file.upload.core.upload.model.UploadChunk;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 @Component
-public class UploadClientImpl implements UploadClient {
+class UploadClientImpl implements UploadClient {
     @Override
     public Mono<UploadResponse> send(UploadChunkClientDTO chunk) {
         var response = new UploadResponse();

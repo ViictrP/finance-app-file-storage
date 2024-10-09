@@ -1,11 +1,9 @@
-package com.victor.financeapp.file.upload.infra.upload.repository;
+package com.victor.financeapp.file.upload.infra.upload.persistence;
 
 import com.victor.financeapp.file.upload.core.upload.model.Upload;
 import com.victor.financeapp.file.upload.core.upload.model.UploadChunk;
 import com.victor.financeapp.file.upload.core.upload.model.enums.Status;
 import com.victor.financeapp.file.upload.core.upload.repository.UploadRepository;
-import com.victor.financeapp.file.upload.infra.upload.entity.UploadChunkEntity;
-import com.victor.financeapp.file.upload.infra.upload.entity.UploadEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -14,7 +12,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class UploadRepositoryImpl implements UploadRepository {
+class UploadRepositoryImpl implements UploadRepository {
 
     private final UploadMongoRepository repository;
     private final UploadChunkMongoRepository chunkRepository;
