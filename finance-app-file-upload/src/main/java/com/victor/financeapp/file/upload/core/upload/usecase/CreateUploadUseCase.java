@@ -25,6 +25,7 @@ public class CreateUploadUseCase implements UseCase<Upload> {
             throw new MissingRequiredFieldException();
         }
 
+        //TODO apply DDD
         var upload = Upload.builder()
                 .userId(payload.userId())
                 .uploadId(UUID.randomUUID().toString())

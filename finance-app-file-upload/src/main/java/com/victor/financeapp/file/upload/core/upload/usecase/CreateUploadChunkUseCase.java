@@ -70,6 +70,7 @@ public class CreateUploadChunkUseCase implements UseCase<UploadChunk> {
                 .onErrorStop();
     }
 
+    //TODO apply DDD
     private Mono<Upload> updateTheUploadStatus(Upload upload, UploadResponse uploadResponse) {
         log.info("Successfully uploaded chunk {} for upload {}", upload.currentPart(), upload.uploadId());
 
@@ -91,6 +92,7 @@ public class CreateUploadChunkUseCase implements UseCase<UploadChunk> {
         return uploadRepository.save(updatedUpload);
     }
 
+    //TODO apply DDD
     private Mono<UploadChunk> updateChunkStatus(UploadChunk payload, UploadResponse response) {
         log.info("Updating the chunk {} status to {}", payload.partNumber(), response.wasSuccessful() ? "completed" : "failed");
         var chunk = UploadChunk.builder()
