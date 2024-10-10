@@ -1,16 +1,28 @@
 <div class="tw-flex tw-flex-row tw-min-h-screen">
-    <div class="tw-flex tw-flex-col tw-items-center tw-px-4 tw-py-4 tw-w-1/4 tw-border-r-[1px] tw-border-gray-200">
+    <div class="tw-flex tw-flex-col tw-items-center tw-px-4 tw-py-4 tw-w-[70px] tw-border-r-[1px] tw-border-gray-200">
         <p class="tw-px-4 tw-my-7">
             <i data-duoicon="sun" class="tw-self-start tw-w-6 tw-h-6"></i>
         </p>
     </div>
-    <div class="tw-flex tw-flex-col tw-p-4 tw-gap-4 tw-w-3/4">
-        <p class="tw-px-4 tw-py-2 tw-my-4 tw-text-2xl tw-font-bold">Dashboard</p>
-<!--        <p class="tw-px-4 tw-py-2 tw-bg-gray-300 tw-rounded-lg">Mundo</p>-->
-<!--        <p class="tw-px-4 tw-py-2 tw-bg-gray-300 tw-rounded-lg">Mundo</p>-->
-<!--        <p class="tw-px-4 tw-py-2 tw-bg-gray-300 tw-rounded-lg">Mundo</p>-->
-<!--        <p class="tw-px-4 tw-py-2 tw-bg-gray-300 tw-rounded-lg">Mundo</p>-->
-<!--        <p class="tw-px-4 tw-py-2 tw-bg-gray-300 tw-rounded-lg">Mundo</p>-->
-<!--        <p class="tw-px-4 tw-py-2 tw-bg-gray-300 tw-rounded-lg">Mundo</p>-->
+    <div class="tw-flex tw-flex-col tw-p-4 tw-gap-4 tw-w-full">
+        <div class="tw-flex tw-flex-row tw-items-center tw-gap-4 tw-px-4 tw-py-2 tw-my-4">
+            <i data-duoicon="folder-upload" class="tw-w-9 tw-h-9"></i>
+            <p class="tw-text-2xl tw-font-medium">Dashboard</p>
+        </div>
+        @for (menu of menus; track $index) {
+            <a [href]="'#'" class="w-full tw-inline-flex gap-2 tw-px-4 tw-py-2 tw-bg-gray-200 tw-rounded-lg">
+                <i [attr.data-duoicon]="menu.icon" class="tw-w-6 tw-h-6"></i>
+                {{ menu.label }}
+            </a>
+
+            @if(menu.children) {
+                @for (children of menu.children; track $index) {
+                    <a (click)="navigateTo(menu.label)" class="w-full tw-inline-flex gap-2 tw-pl-8 tw-px-4 tw-py-2">
+                        <i [attr.data-duoicon]="children.icon" class="tw-w-6 tw-h-6"></i>
+                        {{ children.label }}
+                    </a>
+                }
+            }
+        }
     </div>
 </div>

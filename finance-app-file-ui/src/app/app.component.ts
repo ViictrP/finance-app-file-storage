@@ -4,7 +4,7 @@ import { DatePipe } from '@angular/common';
 import { DrawerComponent } from './components/drawer/drawer.component';
 import { HeaderComponent } from './components/header/header.component';
 
-declare var duoIcons: {
+declare const duoIcons: {
     createIcons: Function;
 };
 

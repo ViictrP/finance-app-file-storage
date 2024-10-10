@@ -1,9 +1,13 @@
 import { Routes } from '@angular/router';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import Menu from './types/menu.type';
 
-export const routes: Routes = [
+//TODO fix navigation
+export const routes: Routes & Menu[] = [
     {
         path: '',
-        component: DashboardComponent
+        component: DashboardComponent,
+        label: 'Dashboard',
+        icon: 'world'
     }
 ];
