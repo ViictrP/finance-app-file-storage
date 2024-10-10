@@ -1,1 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    @apply min-h-screen;
+}
+
+.duoicon-primary-layer {
+    @apply text-sky-900;
+}
+
+.duoicon-secondary-layer {
+    @apply text-sky-500;
+}
