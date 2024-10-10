@@ -1,0 +1,49 @@
+<div class="flex flex-col gap-[40px]">
+    <div class="flex flex-row justify-between items-center">
+        <div class="w-96 bg-gray-100 p-4 rounded-lg text-gray-500">Search bar</div>
+        <div>User</div>
+    </div>
+    <div class="w-full flex flex-row items-center justify-between py-9 border-b-[1px] border-gray-100">
+        <div class="flex flex-row items-start gap-4">
+            <i data-duoicon="folder-upload" class="self-start w-12 h-12"></i>
+            <div class="flex flex-col gap-1">
+                <p class="text-4xl font-medium">Bem-vindo, Victor.</p>
+                <p class="text-md font-light text-gray-500">Começe a gerenciar do seus arquivos.</p>
+            </div>
+        </div>
+        <div class="inline-flex gap-4 items-center">
+            <i data-duoicon="world" class="self-start w-6 h-6"></i>
+            <p class="text-sm">São Paulo, SP - {{ today | date: 'hh:mm a' }}</p>
+        </div>
+    </div>
+    <div class="grid grid-cols-4 gap-8">
+        <div class="flex flex-row items-center justify-between bg-gray-100 p-8 rounded-xl">
+            <div class="flex flex-col items-start gap-2">
+                <p class="text-gray-500 text-sm">No. Arquivos</p>
+                <p class="text-3xl font-medium">23</p>
+            </div>
+            <i data-duoicon="box" class="w-9 h-9"></i>
+        </div>
+        <div class="flex flex-row items-center justify-between bg-gray-100 p-8 rounded-xl">
+            <div class="flex flex-col items-start gap-2">
+                <p class="text-gray-500 text-sm">Utilizado</p>
+                <p class="text-3xl font-medium">75%</p>
+            </div>
+            <i data-duoicon="chart-pie" class="w-9 h-9"></i>
+        </div>
+        <div class="flex flex-row items-center justify-between bg-gray-100 p-8 rounded-xl">
+            <div class="flex flex-col items-start gap-2">
+                <p class="text-gray-500 text-sm">Disponível</p>
+                <p class="text-3xl font-medium">25GB</p>
+            </div>
+            <i data-duoicon="chart-pie" class="w-9 h-9"></i>
+        </div>
+        <div class="flex flex-row items-center justify-between bg-gray-100 p-8 rounded-xl">
+            <div class="flex flex-col items-start gap-2">
+                <p class="text-gray-500 text-sm">Total</p>
+                <p class="text-3xl font-medium">100GB</p>
+            </div>
+            <i data-duoicon="folder-open" class="w-9 h-9"></i>
+        </div>
+    </div>
+</div>
