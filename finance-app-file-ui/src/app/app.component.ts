@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { DrawerComponent } from './components/drawer/drawer.component';
+import { HeaderComponent } from './components/header/header.component';
 
 declare var duoIcons: {
     createIcons: Function;
@@ -10,7 +11,7 @@ declare var duoIcons: {
 @Component({
   selector: 'app-root',
   standalone: true,
-    imports: [RouterOutlet, DatePipe, DrawerComponent],
+    imports: [RouterOutlet, DatePipe, DrawerComponent, HeaderComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

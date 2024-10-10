@@ -1,49 +1,53 @@
-<div class="flex flex-col gap-[40px]">
-    <div class="flex flex-row justify-between items-center">
-        <div class="w-96 bg-gray-100 p-4 rounded-lg text-gray-500">Search bar</div>
-        <div>User</div>
-    </div>
-    <div class="w-full flex flex-row items-center justify-between py-9 border-b-[1px] border-gray-100">
-        <div class="flex flex-row items-start gap-4">
-            <i data-duoicon="folder-upload" class="self-start w-12 h-12"></i>
-            <div class="flex flex-col gap-1">
-                <p class="text-4xl font-medium">Bem-vindo, Victor.</p>
-                <p class="text-md font-light text-gray-500">Começe a gerenciar do seus arquivos.</p>
+<div class="tw-flex tw-flex-col">
+    <div class="tw-w-full tw-flex tw-flex-row tw-items-center tw-justify-between tw-py-9 tw-border-b-[1px] tw-border-gray-100">
+        <div class="tw-flex tw-flex-row tw-items-start tw-gap-4">
+            <i data-duoicon="folder-upload" class="tw-self-start tw-w-12 tw-h-12"></i>
+            <div class="tw-flex tw-flex-col tw-gap-1 tw-pb-3">
+                <p class="tw-text-4xl tw-font-medium">Bem-vindo, {{ user.name }}.</p>
+                <p class="tw-text-md tw-font-light tw-text-gray-500">Começe a gerenciar do seus arquivos.</p>
             </div>
         </div>
-        <div class="inline-flex gap-4 items-center">
-            <i data-duoicon="world" class="self-start w-6 h-6"></i>
-            <p class="text-sm">São Paulo, SP - {{ today | date: 'hh:mm a' }}</p>
+        <div class="tw-inline-flex tw-gap-4 tw-items-center">
+            <i data-duoicon="world" class="tw-self-start tw-w-6 tw-h-6"></i>
+            <p class="tw-tw-text-sm">São Paulo, SP - {{ today | date: 'hh:mm a' }}</p>
         </div>
     </div>
-    <div class="grid grid-cols-4 gap-8">
-        <div class="flex flex-row items-center justify-between bg-gray-100 p-8 rounded-xl">
-            <div class="flex flex-col items-start gap-2">
-                <p class="text-gray-500 text-sm">No. Arquivos</p>
-                <p class="text-3xl font-medium">23</p>
+    <div class="tw-mt-14 tw-grid tw-grid-cols-4 tw-gap-8">
+        <div class="tw-flex tw-flex-row tw-items-center tw-justify-between tw-bg-gray-100 tw-px-8 tw-py-4 tw-rounded-xl">
+            <div class="tw-flex tw-flex-col tw-tw-items-start tw-gap-2">
+                <p class="tw-text-gray-500 tw-tw-text-sm">No. Arquivos</p>
+                <p class="tw-text-3xl tw-font-medium">23</p>
             </div>
-            <i data-duoicon="box" class="w-9 h-9"></i>
+            <div class="tw-p-4 tw-bg-zinc-50 tw-rounded-full">
+                <i data-duoicon="box" class="tw-tw-w-9 tw-h-9"></i>
+            </div>
         </div>
-        <div class="flex flex-row items-center justify-between bg-gray-100 p-8 rounded-xl">
-            <div class="flex flex-col items-start gap-2">
-                <p class="text-gray-500 text-sm">Utilizado</p>
-                <p class="text-3xl font-medium">75%</p>
+        <div class="tw-flex tw-flex-row tw-items-center tw-justify-between tw-bg-gray-100 tw-px-8 tw-py-4 tw-rounded-xl">
+            <div class="tw-flex tw-flex-col tw-items-start tw-gap-2">
+                <p class="tw-text-gray-500 tw-tw-text-sm">Utilizado</p>
+                <p class="tw-text-3xl tw-font-medium">75%</p>
             </div>
-            <i data-duoicon="chart-pie" class="w-9 h-9"></i>
+            <div class="tw-p-4 tw-bg-zinc-50 tw-rounded-full">
+                <i data-duoicon="chart-pie" class="tw-w-9 tw-h-9"></i>
+            </div>
         </div>
-        <div class="flex flex-row items-center justify-between bg-gray-100 p-8 rounded-xl">
-            <div class="flex flex-col items-start gap-2">
-                <p class="text-gray-500 text-sm">Disponível</p>
-                <p class="text-3xl font-medium">25GB</p>
+        <div class="tw-flex tw-flex-row tw-items-center tw-justify-between tw-bg-gray-100 tw-px-8 tw-py-4 tw-rounded-xl">
+            <div class="tw-flex tw-flex-col tw-items-start tw-gap-2">
+                <p class="tw-text-gray-500 tw-text-sm">Disponível</p>
+                <p class="tw-text-3xl tw-font-medium">25GB</p>
             </div>
-            <i data-duoicon="chart-pie" class="w-9 h-9"></i>
+            <div class="tw-p-4 tw-bg-zinc-50 tw-rounded-full">
+                <i data-duoicon="chart-pie" class="tw-w-9 tw-h-9"></i>
+            </div>
         </div>
-        <div class="flex flex-row items-center justify-between bg-gray-100 p-8 rounded-xl">
-            <div class="flex flex-col items-start gap-2">
-                <p class="text-gray-500 text-sm">Total</p>
-                <p class="text-3xl font-medium">100GB</p>
+        <div class="tw-flex tw-flex-row tw-items-center tw-justify-between tw-bg-gray-100 tw-px-8 tw-py-4 tw-rounded-xl">
+            <div class="tw-flex tw-flex-col tw-items-start tw-gap-2">
+                <p class="tw-text-gray-500 tw-text-sm">Total</p>
+                <p class="tw-text-3xl tw-font-medium">100GB</p>
             </div>
-            <i data-duoicon="folder-open" class="w-9 h-9"></i>
+            <div class="tw-p-4 tw-bg-zinc-50 tw-rounded-full">
+                <i data-duoicon="folder-open" class="tw-w-9 tw-h-9"></i>
+            </div>
         </div>
     </div>
 </div>

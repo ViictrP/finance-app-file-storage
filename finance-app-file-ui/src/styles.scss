@@ -1,15 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+* {
+    font-family: 'Noto Sans', sans-serif;
+}
+
 body {
-    @apply min-h-screen;
+    @apply tw-min-h-screen;
 }
 
 .duoicon-primary-layer {
-    @apply text-sky-900;
+    @apply tw-text-sky-900;
 }
 
 .duoicon-secondary-layer {
-    @apply text-sky-500;
+    @apply tw-text-sky-500;
 }

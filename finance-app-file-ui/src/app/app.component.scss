@@ -1,11 +1,11 @@
 .container {
-    @apply max-w-screen-xl min-w-[90%] flex flex-col justify-start py-6 px-9;
+    @apply tw-max-w-screen-xl tw-min-w-[90%] tw-flex tw-flex-col tw-justify-start tw-py-2 tw-px-9;
 }
 
 .navigation {
-    @apply min-w-[350px] min-h-screen bg-gray-100 p-4;
+    @apply tw-min-w-[350px] tw-min-h-screen tw-bg-gray-100;
 }
 
 .main {
-    @apply w-full flex flex-row justify-center;
+    @apply tw-w-full tw-flex tw-flex-row tw-justify-center;
 }
