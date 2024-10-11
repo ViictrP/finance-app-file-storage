@@ -35,6 +35,7 @@ public class UploadController {
                         .userId(userId)
                         .uploadId(uploadId)
                         .fileName(fileName + "." + fileExtension)
+                        .file(file)
                         .totalFileSize(Long.valueOf(fileSize))
                         .mimeType(fileExtension)
                         .build())

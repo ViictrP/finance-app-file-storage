@@ -63,4 +63,4 @@ logging:
 
 web:
   storage:
-    uri: http://storage.local.gd
+    uri: http://localhost:8082

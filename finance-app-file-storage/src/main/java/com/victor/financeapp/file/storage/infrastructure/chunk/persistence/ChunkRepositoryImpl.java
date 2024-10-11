@@ -25,6 +25,7 @@ class ChunkRepositoryImpl implements ChunkRepository {
                 .userId(chunk.getUserId())
                 .fileName(chunk.getFileName())
                 .fileSize(chunk.getFileSize())
+                .path(chunk.getPath().toString())
                 .mimeType(chunk.getMimeType())
                 .totalFileSize(chunk.getTotalFileSize())
                 .build();

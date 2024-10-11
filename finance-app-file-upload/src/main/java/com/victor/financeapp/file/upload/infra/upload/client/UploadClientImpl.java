@@ -21,13 +21,14 @@ class UploadClientImpl implements UploadClient {
     @Override
     public Mono<UploadResponse> send(UploadChunkClientDTO chunk) {
         return storageWebClient.post()
-                .uri("/uploads/" + chunk.uploadId() + "/chunk")
+                .uri("/v1/chunks")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .body(BodyInserters.fromMultipartData("partNumber", chunk.partNumber().toString())
                         .with("userId", chunk.userId())
                         .with("fileName", chunk.fileName())
                         .with("fileExtension", chunk.fileExtension())
                         .with("fileSize", chunk.fileSize().toString())
+                        .with("uploadId", chunk.uploadId())
                         .with("file", chunk.file())
                 )
                 .retrieve()
