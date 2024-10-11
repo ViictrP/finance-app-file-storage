@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -29,7 +31,7 @@ public class CreateUploadChunkUseCase implements UseCase<UploadChunk> {
 
         log.info("Fetching the upload {} details", payload.uploadId());
         return uploadRepository
-                .findByUploadIdAndStatus(payload.uploadId(), Status.CREATED.name())
+                .findByUploadIdAndStatusIn(payload.uploadId(), List.of(Status.CREATED, Status.FAILED))
                 .switchIfEmpty(Mono.error(new UploadNotFoundException(payload.uploadId())))
                 .flatMap(upload -> {
                     log.info("Saving chunk {} for upload {} with initial status", payload.partNumber(), payload.uploadId());
@@ -39,15 +41,14 @@ public class CreateUploadChunkUseCase implements UseCase<UploadChunk> {
                                             .partNumber(payload.partNumber())
                                             .userId(payload.userId())
                                             .status(Status.IN_PROGRESS)
+                                            .file(payload.file())
                                             .build()
                             )
-                            .flatMap(chunk -> sendTheUploadAndUpdateStatus(chunk, upload)
-                                    .flatMap(response -> updateChunkStatus(chunk, response))
-                            );
+                            .flatMap(chunk -> sendTheUploadAndUpdateStatus(chunk, upload));
                 });
     }
 
-    private Mono<UploadResponse> sendTheUploadAndUpdateStatus(UploadChunk chunk, Upload upload) {
+    private Mono<UploadChunk> sendTheUploadAndUpdateStatus(UploadChunk chunk, Upload upload) {
         log.info("Sending chunk {} for upload {}", chunk.partNumber(), chunk.uploadId());
         return uploadClient.send(new UploadChunkClientDTO(
                         chunk.uploadId(),
@@ -58,38 +59,38 @@ public class CreateUploadChunkUseCase implements UseCase<UploadChunk> {
                         upload.fileSize(),
                         chunk.file()
                 ))
-                .flatMap(response -> {
-                    if (response.wasSuccessful()) {
-                        return updateTheUploadStatus(upload, response)
-                                .then(Mono.just(response));
-                    } else {
-                        return Mono.error(new UploadFailedException());
-                    }
-                })
-                .doOnError(throwable -> log.error("Failed to upload chunk {} for upload {}, message: {}", chunk.partNumber(), chunk.uploadId(), throwable.getMessage()))
-                .onErrorStop();
+                .flatMap(response ->
+                        updateTheUploadStatus(upload, response)
+                                .flatMap(u -> updateChunkStatus(chunk, response))
+                                .then(response.wasSuccessful() ? Mono.just(chunk) : Mono.error(new UploadFailedException()))
+                )
+                .doOnError(throwable -> log.error("Failed to upload chunk {} for upload {}, message: {}", chunk.partNumber(), chunk.uploadId(), throwable.getMessage()));
     }
 
     //TODO apply DDD
     private Mono<Upload> updateTheUploadStatus(Upload upload, UploadResponse uploadResponse) {
         log.info("Successfully uploaded chunk {} for upload {}", upload.currentPart(), upload.uploadId());
 
-        var updatedUpload = Upload.builder()
+        var builder = Upload.builder()
                 .id(upload.id())
-                .status(upload.totalParts().equals(uploadResponse.getCurrentPart()) ? Status.COMPLETED : Status.IN_PROGRESS)
-                .filePath(uploadResponse.getFilePath().replace("file_chunk_" + uploadResponse.getCurrentPart() + ".part", upload.fileName()))
+                .status(Status.FAILED)
                 .currentPart(uploadResponse.getCurrentPart())
                 .userId(upload.userId())
                 .uploadId(upload.uploadId())
                 .fileName(upload.fileName())
                 .fileExtension(upload.fileExtension())
                 .fileSize(upload.fileSize())
-                .totalParts(upload.totalParts())
-                .build();
+                .totalParts(upload.totalParts());
+
+        if (uploadResponse.wasSuccessful()) {
+            builder.filePath(uploadResponse.getFilePath().replace("file_chunk_" + uploadResponse.getCurrentPart() + ".part", upload.fileName()))
+                    .status(upload.totalParts().equals(uploadResponse.getCurrentPart()) ? Status.COMPLETED : Status.IN_PROGRESS);
+        }
+
 
         log.info("Updating the payload {} progress ", upload.uploadId());
         //TODO send upload completed event after saving.
-        return uploadRepository.save(updatedUpload);
+        return uploadRepository.save(builder.build());
     }
 
     //TODO apply DDD

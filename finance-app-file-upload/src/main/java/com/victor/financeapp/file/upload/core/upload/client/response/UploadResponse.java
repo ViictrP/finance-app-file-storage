@@ -17,4 +17,10 @@ public class UploadResponse {
     public boolean wasSuccessful() {
         return success != null && success;
     }
+
+    public static UploadResponse unsuccessful() {
+        var response = new UploadResponse();
+        response.setSuccess(false);
+        return response;
+    }
 }

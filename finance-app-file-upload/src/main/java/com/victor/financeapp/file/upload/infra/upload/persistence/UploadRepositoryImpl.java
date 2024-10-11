@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Repository
 @RequiredArgsConstructor
@@ -43,14 +46,15 @@ class UploadRepositoryImpl implements UploadRepository {
                         .uploadId(entity.getUploadId())
                         .chunkPath(chunk.chunkPath())
                         .id(entity.getId())
+                        .file(chunk.file())
                         .build())
                 )
                 .doOnSuccess(c -> log.info("Upload chunk created: {}", c.id()));
     }
 
     @Override
-    public Mono<Upload> findByUploadIdAndStatus(String id, String status) {
-        return repository.findByUploadIdAndStatus(id, status)
+    public Mono<Upload> findByUploadIdAndStatusIn(String id, List<Status> statuses) {
+        return repository.findByUploadIdAndStatusIn(id, statuses.stream().map(Status::name).toList())
                 .flatMap(entity -> Mono.just(Upload.builder()
                         .id(entity.getId())
                         .userId(entity.getUserId())

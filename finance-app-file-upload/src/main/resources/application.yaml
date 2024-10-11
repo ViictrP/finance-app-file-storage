@@ -60,3 +60,7 @@ logging:
     org.springframework.kafka: WARN
     org.apache.kafka: WARN
     com.victor.financeapp.file.storage: INFO
+
+web:
+  storage:
+    uri: http://storage.local.gd
