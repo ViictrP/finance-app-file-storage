@@ -1,26 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { routes } from '../../app.routes';
-import Menu from '../../types/menu.type';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, Routes } from '@angular/router';
 
 @Component({
     selector: 'app-drawer',
     standalone: true,
     templateUrl: './drawer.component.html',
     imports: [
+        RouterLink,
+        RouterLinkActive,
     ],
 })
 export class DrawerComponent implements OnInit {
-    menus: Menu[] = [];
+    private _menus: Routes = [];
 
     constructor(private readonly router: Router) {
     }
 
     ngOnInit(): void {
-        this.menus = routes;
+        this._menus = routes;
     }
 
-    async navigateTo(label: string) {
-        return this.router.navigate([`/dashboard/${label}`]);
+    get menus(): Routes {
+        return this._menus[1].children ?? [];
     }
 }

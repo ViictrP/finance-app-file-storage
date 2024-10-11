@@ -7,20 +7,22 @@
     <div class="tw-flex tw-flex-col tw-p-4 tw-gap-4 tw-w-full">
         <div class="tw-flex tw-flex-row tw-items-center tw-gap-4 tw-px-4 tw-py-2 tw-my-4">
             <i data-duoicon="folder-upload" class="tw-w-9 tw-h-9"></i>
-            <p class="tw-text-2xl tw-font-medium">Dashboard</p>
+            <p class="tw-text-2xl tw-font-medium">File Storage</p>
         </div>
         @for (menu of menus; track $index) {
-            <a [href]="'#'" class="w-full tw-inline-flex gap-2 tw-px-4 tw-py-2 tw-bg-gray-200 tw-rounded-lg">
-                <i [attr.data-duoicon]="menu.icon" class="tw-w-6 tw-h-6"></i>
-                {{ menu.label }}
-            </a>
+            @if(menu.title) {
+                <a [routerLink]="menu.path!" routerLinkActive="tw-bg-gray-200" class="w-full tw-inline-flex gap-2 tw-px-4 tw-py-2 tw-rounded-lg">
+                    <i [attr.data-duoicon]="menu.data!['icon']" class="tw-w-6 tw-h-6"></i>
+                    {{ menu.title }}
+                </a>
 
-            @if(menu.children) {
-                @for (children of menu.children; track $index) {
-                    <a (click)="navigateTo(menu.label)" class="w-full tw-inline-flex gap-2 tw-pl-8 tw-px-4 tw-py-2">
-                        <i [attr.data-duoicon]="children.icon" class="tw-w-6 tw-h-6"></i>
-                        {{ children.label }}
-                    </a>
+                @if(menu.children) {
+                    @for (children of menu.children; track $index) {
+                        <a [routerLink]="[menu.path, children.path!]" routerLinkActive="tw-bg-gray-200" class="w-full tw-inline-flex gap-2 tw-ml-8 tw-px-4 tw-py-2 tw-rounded-lg">
+                            <i [attr.data-duoicon]="children.data!['icon']" class="tw-w-6 tw-h-6"></i>
+                            {{ children.title }}
+                        </a>
+                    }
                 }
             }
         }

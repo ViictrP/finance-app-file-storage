@@ -1,13 +1,21 @@
 import { Routes } from '@angular/router';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import Menu from './types/menu.type';
+import { HomeComponent } from './components/home/home.component';
 
-//TODO fix navigation
-export const routes: Routes & Menu[] = [
+export const routes: Routes = [
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     {
         path: '',
-        component: DashboardComponent,
-        label: 'Dashboard',
-        icon: 'world'
+        component: HomeComponent,
+        children: [
+            {
+                path: 'dashboard',
+                title: 'Dashboard',
+                data: {
+                    icon: 'app',
+                },
+                component: DashboardComponent
+            }
+        ],
     }
 ];
