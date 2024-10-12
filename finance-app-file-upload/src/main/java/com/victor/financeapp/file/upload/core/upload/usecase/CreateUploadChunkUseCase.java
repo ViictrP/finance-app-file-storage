@@ -62,7 +62,7 @@ public class CreateUploadChunkUseCase implements UseCase<UploadChunk> {
                 .flatMap(response ->
                         updateTheUploadStatus(upload, response)
                                 .flatMap(u -> updateChunkStatus(chunk, response))
-                                .then(response.wasSuccessful() ? Mono.just(chunk) : Mono.error(new UploadFailedException()))
+                                .flatMap(c -> response.wasSuccessful() ? Mono.just(c) : Mono.error(new UploadFailedException()))
                 )
                 .doOnError(throwable -> log.error("Failed to upload chunk {} for upload {}, message: {}", chunk.partNumber(), chunk.uploadId(), throwable.getMessage()));
     }
@@ -83,7 +83,7 @@ public class CreateUploadChunkUseCase implements UseCase<UploadChunk> {
                 .totalParts(upload.totalParts());
 
         if (uploadResponse.wasSuccessful()) {
-            builder.filePath(uploadResponse.getFilePath().replace("file_chunk_" + uploadResponse.getCurrentPart() + ".part", upload.fileName()))
+            builder.filePath(uploadResponse.getFilePath().replace("chunk_" + uploadResponse.getCurrentPart() + ".part", upload.fileName()))
                     .status(upload.totalParts().equals(uploadResponse.getCurrentPart()) ? Status.COMPLETED : Status.IN_PROGRESS);
         }
 

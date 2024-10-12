@@ -63,4 +63,4 @@ logging:
 
 web:
   storage:
-    uri: http://storage.local.gd
+    uri: http://storage-service.storage-api.svc.cluster.local:8080
