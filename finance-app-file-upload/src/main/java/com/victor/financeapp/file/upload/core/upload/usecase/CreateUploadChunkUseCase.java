@@ -31,7 +31,7 @@ public class CreateUploadChunkUseCase implements UseCase<UploadChunk> {
 
         log.info("Fetching the upload {} details", payload.uploadId());
         return uploadRepository
-                .findByUploadIdAndStatusIn(payload.uploadId(), List.of(Status.CREATED, Status.FAILED))
+                .findByUploadIdAndStatusIn(payload.uploadId(), List.of(Status.CREATED, Status.FAILED)) //TODO fix when it has multiple parts not finding the upload
                 .switchIfEmpty(Mono.error(new UploadNotFoundException(payload.uploadId())))
                 .flatMap(upload -> {
                     log.info("Saving chunk {} for upload {} with initial status", payload.partNumber(), payload.uploadId());
