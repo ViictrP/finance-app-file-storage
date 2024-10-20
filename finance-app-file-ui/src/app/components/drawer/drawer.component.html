@@ -11,14 +11,14 @@
         </div>
         @for (menu of menus; track $index) {
             @if(menu.title) {
-                <a [routerLink]="menu.path!" routerLinkActive="tw-bg-gray-200" class="w-full tw-inline-flex gap-2 tw-px-4 tw-py-2 tw-rounded-lg">
+                <a [routerLink]="menu.path!" routerLinkActive="tw-bg-gray-300 tw-text-gray-950" class="tw-text-gray-500 w-full tw-inline-flex gap-2 tw-px-4 tw-py-2 tw-rounded-lg">
                     <i [attr.data-duoicon]="menu.data!['icon']" class="tw-w-6 tw-h-6"></i>
                     {{ menu.title }}
                 </a>
 
                 @if(menu.children) {
                     @for (children of menu.children; track $index) {
-                        <a [routerLink]="[menu.path, children.path!]" routerLinkActive="tw-bg-gray-200" class="w-full tw-inline-flex gap-2 tw-ml-8 tw-px-4 tw-py-2 tw-rounded-lg">
+                        <a [routerLink]="[menu.path, children.path!]" routerLinkActive="tw-bg-gray-300" class="w-full tw-inline-flex gap-2 tw-ml-8 tw-px-4 tw-py-2 tw-rounded-lg">
                             <i [attr.data-duoicon]="children.data!['icon']" class="tw-w-6 tw-h-6"></i>
                             {{ children.title }}
                         </a>

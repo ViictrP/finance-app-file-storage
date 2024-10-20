@@ -14,7 +14,18 @@ export const routes: Routes = [
                 data: {
                     icon: 'app',
                 },
-                component: DashboardComponent
+                component: DashboardComponent,
+                children: [
+                    {
+                        path: 'dashboard',
+                        title: 'Dashboard',
+                        data: {
+                            icon: 'app',
+                        },
+                        component: DashboardComponent
+                    }
+
+                ]
             }
         ],
     }
