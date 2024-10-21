@@ -23,12 +23,12 @@ class UploadChunkEntity {
 
     public static UploadChunkEntity fromUpload(UploadChunk chunk) {
         return UploadChunkEntity.builder()
-                .id(chunk.id())
-                .status(chunk.status().name())
-                .userId(chunk.userId())
-                .uploadId(chunk.uploadId())
-                .partNumber(chunk.partNumber())
-                .chunkPath(chunk.chunkPath())
+                .id(chunk.getId())
+                .status(chunk.getStatus().name())
+                .userId(chunk.getUserId())
+                .uploadId(chunk.getUploadId())
+                .partNumber(chunk.getPartNumber())
+                .chunkPath(chunk.getChunkPath())
                 .build();
     }
 }

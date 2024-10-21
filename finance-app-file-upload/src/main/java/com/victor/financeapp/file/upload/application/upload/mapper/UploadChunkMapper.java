@@ -11,11 +11,11 @@ public final class UploadChunkMapper {
     public static UploadChunkDTO uploadChunktoDTO(UploadChunk uploadChunk) {
         if (uploadChunk != null) {
             return UploadChunkDTO.builder()
-                    .id(uploadChunk.id())
-                    .uploadId(uploadChunk.uploadId())
-                    .partNumber(uploadChunk.partNumber())
-                    .userId(uploadChunk.userId())
-                    .status(uploadChunk.status().name())
+                    .id(uploadChunk.getId())
+                    .uploadId(uploadChunk.getUploadId())
+                    .partNumber(uploadChunk.getPartNumber())
+                    .userId(uploadChunk.getUserId())
+                    .status(uploadChunk.getStatus().name())
                     .build();
         }
         return null;

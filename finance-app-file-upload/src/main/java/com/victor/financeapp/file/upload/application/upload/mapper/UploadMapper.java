@@ -11,11 +11,11 @@ public final class UploadMapper {
     public static UploadDTO uploadtoDTO(Upload upload) {
         if (upload != null) {
             return UploadDTO.builder()
-                    .id(upload.id())
-                    .userId(upload.userId())
-                    .uploadId(upload.uploadId())
-                    .status(upload.status().name())
-                    .totalParts(upload.totalParts())
+                    .id(upload.getId())
+                    .userId(upload.getUserId())
+                    .uploadId(upload.getUploadId())
+                    .status(upload.getStatus().name())
+                    .totalParts(upload.getTotalParts())
                     .build();
         }
         return null;

@@ -27,16 +27,16 @@ class UploadEntity {
 
     public static UploadEntity fromUpload(Upload upload) {
         return UploadEntity.builder()
-                .id(upload.id())
-                .status(upload.status().name())
-                .userId(upload.userId())
-                .uploadId(upload.uploadId())
-                .fileName(upload.fileName())
-                .fileExtension(upload.fileExtension())
-                .fileSize(upload.fileSize())
-                .totalParts(upload.totalParts())
-                .currentPart(upload.currentPart())
-                .filePath(upload.filePath())
+                .id(upload.getId())
+                .status(upload.getStatus().name())
+                .userId(upload.getUserId())
+                .uploadId(upload.getUploadId())
+                .fileName(upload.getFileName())
+                .fileExtension(upload.getFileExtension())
+                .fileSize(upload.getFileSize())
+                .totalParts(upload.getTotalParts())
+                .currentPart(upload.getCurrentPart())
+                .filePath(upload.getFilePath())
                 .build();
     }
 }

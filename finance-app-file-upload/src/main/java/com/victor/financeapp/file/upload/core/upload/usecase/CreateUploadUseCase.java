@@ -20,23 +20,19 @@ public class CreateUploadUseCase implements UseCase<Upload> {
 
     @Override
     public Mono<Upload> execute(Upload payload) {
-        log.info("Validating payload from user {}", payload.userId());
-        if (payload.userId() == null) {
+        log.info("Validating payload from user {}", payload.getUserId());
+        if (payload.getUserId() == null) {
             throw new MissingRequiredFieldException();
         }
 
-        //TODO apply DDD
-        var upload = Upload.builder()
-                .userId(payload.userId())
-                .uploadId(UUID.randomUUID().toString())
-                .status(Status.CREATED)
-                .totalParts(payload.totalParts())
-                .fileName(payload.fileName())
-                .fileSize(payload.fileSize())
-                .fileExtension(payload.fileExtension())
-                .build();
+        var upload = Upload.startNewUpload(payload.getUserId(),
+                payload.getTotalParts(),
+                payload.getFileName(),
+                payload.getFileExtension(),
+                payload.getFileSize()
+        );
 
-        log.info("Creating upload {}", upload.uploadId());
+        log.info("Creating upload {}", upload.getUploadId());
         return uploadRepository.save(upload);
     }
 }

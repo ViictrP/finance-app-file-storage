@@ -1,7 +1,6 @@
 package com.victor.financeapp.file.upload.core.upload.usecase;
 
 import com.victor.financeapp.file.upload.core.upload.client.UploadClient;
-import com.victor.financeapp.file.upload.core.upload.client.dto.UploadChunkClientDTO;
 import com.victor.financeapp.file.upload.core.upload.client.response.UploadResponse;
 import com.victor.financeapp.file.upload.core.upload.exception.UploadFailedException;
 import com.victor.financeapp.file.upload.core.upload.exception.UploadNotFoundException;
@@ -26,85 +25,49 @@ public class CreateUploadChunkUseCase implements UseCase<UploadChunk> {
 
     @Override
     public Mono<UploadChunk> execute(UploadChunk payload) {
-        log.info("Validating the upload {} with part {}", payload.uploadId(), payload.partNumber());
+        log.info("Validating the upload {} with part {}", payload.getUploadId(), payload.getPartNumber());
         payload.validate();
 
-        log.info("Fetching the upload {} details", payload.uploadId());
+        log.info("Fetching the upload {} details", payload.getUploadId());
         return uploadRepository
-                .findByUploadIdAndStatusIn(payload.uploadId(), List.of(Status.CREATED, Status.FAILED)) //TODO fix when it has multiple parts not finding the upload
-                .switchIfEmpty(Mono.error(new UploadNotFoundException(payload.uploadId())))
+                .findByUploadIdAndStatusIn(payload.getUploadId(), List.of(Status.CREATED, Status.FAILED)) //TODO fix when it has multiple parts not finding the upload
+                .switchIfEmpty(Mono.error(new UploadNotFoundException(payload.getUploadId())))
                 .flatMap(upload -> {
-                    log.info("Saving chunk {} for upload {} with initial status", payload.partNumber(), payload.uploadId());
-                    return uploadRepository.saveChunk(
-                                    UploadChunk.builder()
-                                            .uploadId(payload.uploadId())
-                                            .partNumber(payload.partNumber())
-                                            .userId(payload.userId())
-                                            .status(Status.IN_PROGRESS)
-                                            .file(payload.file())
-                                            .build()
-                            )
-                            .flatMap(chunk -> sendTheUploadAndUpdateStatus(chunk, upload));
+                    log.info("Saving chunk {} for upload {} with initial status", payload.getPartNumber(), payload.getUploadId());
+                    upload.createNewChunk(payload.getPartNumber(), payload.getFile());
+                    return uploadRepository.saveChunk(upload.getCurrentChunk())
+                            .flatMap(chunk -> sendTheUploadAndUpdateStatus(upload));
                 });
     }
 
-    private Mono<UploadChunk> sendTheUploadAndUpdateStatus(UploadChunk chunk, Upload upload) {
-        log.info("Sending chunk {} for upload {}", chunk.partNumber(), chunk.uploadId());
-        return uploadClient.send(new UploadChunkClientDTO(
-                        chunk.uploadId(),
-                        chunk.userId(),
-                        chunk.partNumber(),
-                        upload.fileName(),
-                        upload.fileExtension(),
-                        upload.fileSize(),
-                        chunk.file()
-                ))
+    private Mono<UploadChunk> sendTheUploadAndUpdateStatus(Upload upload) {
+        log.info("Sending chunk {} for upload {}", upload.getCurrentChunk().getPartNumber(), upload.getUploadId());
+        return uploadClient.send(upload)
                 .flatMap(response ->
                         updateTheUploadStatus(upload, response)
-                                .flatMap(u -> updateChunkStatus(chunk, response))
+                                .flatMap(u -> updateChunkStatus(upload, response))
                                 .flatMap(c -> response.wasSuccessful() ? Mono.just(c) : Mono.error(new UploadFailedException()))
                 )
-                .doOnError(throwable -> log.error("Failed to upload chunk {} for upload {}, message: {}", chunk.partNumber(), chunk.uploadId(), throwable.getMessage()));
+                .doOnError(throwable -> log.error("Failed to upload chunk {} for upload {}, message: {}", upload.getCurrentChunk().getPartNumber(), upload.getCurrentChunk().getUploadId(), throwable.getMessage()));
     }
 
-    //TODO apply DDD
     private Mono<Upload> updateTheUploadStatus(Upload upload, UploadResponse uploadResponse) {
-        log.info("Successfully uploaded chunk {} for upload {}", upload.currentPart(), upload.uploadId());
-
-        var builder = Upload.builder()
-                .id(upload.id())
-                .status(Status.FAILED)
-                .currentPart(uploadResponse.getCurrentPart())
-                .userId(upload.userId())
-                .uploadId(upload.uploadId())
-                .fileName(upload.fileName())
-                .fileExtension(upload.fileExtension())
-                .fileSize(upload.fileSize())
-                .totalParts(upload.totalParts());
+        log.info("Successfully uploaded chunk {} for upload {}", upload.getCurrentPart(), upload.getUploadId());
+        upload.failed();
 
         if (uploadResponse.wasSuccessful()) {
-            builder.filePath(uploadResponse.getFilePath().replace("chunk_" + uploadResponse.getCurrentPart() + ".part", upload.fileName()))
-                    .status(upload.totalParts().equals(uploadResponse.getCurrentPart()) ? Status.COMPLETED : Status.IN_PROGRESS);
+            upload.buildFilePath(uploadResponse.getFilePath());
+            upload.succeeded();
         }
 
-
-        log.info("Updating the payload {} progress ", upload.uploadId());
+        log.info("Updating the payload {} progress ", upload.getUploadId());
         //TODO send upload completed event after saving.
-        return uploadRepository.save(builder.build());
+        return uploadRepository.save(upload);
     }
 
-    //TODO apply DDD
-    private Mono<UploadChunk> updateChunkStatus(UploadChunk payload, UploadResponse response) {
-        log.info("Updating the chunk {} status to {}", payload.partNumber(), response.wasSuccessful() ? "completed" : "failed");
-        var chunk = UploadChunk.builder()
-                .partNumber(payload.partNumber())
-                .chunkPath(response.getFilePath())
-                .uploadId(payload.uploadId())
-                .id(payload.id())
-                .userId(payload.userId())
-                .status(response.wasSuccessful() ? Status.COMPLETED : Status.FAILED)
-                .build();
-
+    private Mono<UploadChunk> updateChunkStatus(Upload upload, UploadResponse response) {
+        var chunk = upload.getCurrentChunk();
+        log.info("Updating the chunk {} status to {}", chunk.getPartNumber(), response.wasSuccessful() ? "completed" : "failed");
         return uploadRepository.saveChunk(chunk);
     }
 }

@@ -1,8 +1,8 @@
 package com.victor.financeapp.file.upload.infra.upload.client;
 
 import com.victor.financeapp.file.upload.core.upload.client.UploadClient;
-import com.victor.financeapp.file.upload.core.upload.client.dto.UploadChunkClientDTO;
 import com.victor.financeapp.file.upload.core.upload.client.response.UploadResponse;
+import com.victor.financeapp.file.upload.core.upload.model.Upload;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -19,17 +19,18 @@ class UploadClientImpl implements UploadClient {
     private final WebClient storageWebClient;
 
     @Override
-    public Mono<UploadResponse> send(UploadChunkClientDTO chunk) {
+    public Mono<UploadResponse> send(Upload upload) {
+        var chunk = upload.getCurrentChunk();
         return storageWebClient.post()
                 .uri("/v1/chunks")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
-                .body(BodyInserters.fromMultipartData("partNumber", chunk.partNumber().toString())
-                        .with("userId", chunk.userId())
-                        .with("fileName", chunk.fileName())
-                        .with("fileExtension", chunk.fileExtension())
-                        .with("fileSize", chunk.fileSize().toString())
-                        .with("uploadId", chunk.uploadId())
-                        .with("file", chunk.file())
+                .body(BodyInserters.fromMultipartData("partNumber", chunk.getPartNumber().toString())
+                        .with("userId", chunk.getUserId())
+                        .with("fileName", upload.getFileName())
+                        .with("fileExtension", upload.getFileExtension())
+                        .with("fileSize", upload.getFileSize().toString())
+                        .with("uploadId", upload.getUploadId())
+                        .with("file", chunk.getFile())
                 )
                 .retrieve()
                 .bodyToMono(UploadResponse.class)
