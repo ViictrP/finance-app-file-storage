@@ -30,16 +30,9 @@ class ChunkRepositoryImpl implements ChunkRepository {
                 .totalFileSize(chunk.getTotalFileSize())
                 .build();
         return chunkMongoRepository.save(newChunk)
-                .flatMap(chunkEntity -> Mono.just(Chunk.builder()
-                        .id(chunkEntity.getId())
-                        .fileSize(chunkEntity.getFileSize())
-                        .totalFileSize(chunkEntity.getTotalFileSize())
-                        .path(Path.of(chunkEntity.getPath()))
-                        .partNumber(chunkEntity.getPartNumber())
-                        .userId(chunkEntity.getUserId())
-                        .uploadId(chunkEntity.getUploadId())
-                        .fileName(chunkEntity.getFileName())
-                        .mimeType(chunkEntity.getMimeType())
-                        .build()));
+                .flatMap(chunkEntity -> {
+                    chunk.setId(chunkEntity.getId());
+                    return Mono.just(chunk);
+                });
     }
 }

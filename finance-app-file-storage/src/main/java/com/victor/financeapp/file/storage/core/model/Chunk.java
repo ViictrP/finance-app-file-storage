@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.codec.multipart.Part;
@@ -26,8 +27,10 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class Chunk {
 
-    private Path path;
+    @Setter
     private String id;
+
+    private Path path;
     private String uploadId;
     private Integer partNumber;
     private String userId;
