@@ -6,7 +6,6 @@ import { RouterOutlet } from '@angular/router';
     templateUrl: './home.component.html',
     imports: [
         RouterOutlet,
-    ],
-    standalone: true,
+    ]
 })
 export class HomeComponent {}

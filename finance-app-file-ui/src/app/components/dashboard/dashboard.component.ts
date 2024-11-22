@@ -4,11 +4,10 @@ import User from '../../model/user';
 
 @Component({
     selector: 'app-dashboard',
-    standalone: true,
     imports: [
         DatePipe,
     ],
-    templateUrl: './dashboard.component.html',
+    templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent {
     today = new Date();

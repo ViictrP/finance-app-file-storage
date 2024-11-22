@@ -6,8 +6,7 @@ import { DropdownComponent } from '../../lib/components/dropdown/dropdown.compon
     templateUrl: './header.component.html',
     imports: [
         DropdownComponent,
-    ],
-    standalone: true,
+    ]
 })
 export class HeaderComponent {
 
